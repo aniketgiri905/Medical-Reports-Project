@@ -1,0 +1,486 @@
+.patient-form-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.patient-form {
+  padding: 2rem;
+}
+
+.form-actions-top {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e8e8e8;
+  flex-wrap: wrap;
+}
+
+.file-upload-btn {
+  padding: 0.6em 1.2em;
+  background-color: #27ae60;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background-color 0.25s;
+}
+
+.file-upload-btn:hover {
+  background-color: #229954;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  border-left: 4px solid #4a90e2;
+  padding-left: 0.75rem;
+}
+
+.form-section h3 {
+  color: #34495e;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input.readonly {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.checkbox-group label {
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.history-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.history-column {
+  border: 1px solid #e0e0e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.history-column h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #4a90e2;
+}
+
+.history-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: flex-start;
+}
+
+.history-item input {
+  flex: 1;
+  padding: 0.6em 0.8em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.history-item input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.history-items-list {
+  margin-bottom: 1rem;
+}
+
+.remove-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5em 0.75em;
+  font-size: 1.2em;
+  white-space: nowrap;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.remove-btn:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+}
+
+.add-more-btn {
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.add-more-btn:hover {
+  background-color: #229954;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 2px solid #e8e8e8;
+}
+
+.form-actions button[type="button"]:last-child {
+  background-color: #95a5a6;
+}
+
+.form-actions button[type="button"]:last-child:hover {
+  background-color: #7f8c8d;
+}
+
+.logo-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.logo-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+}
+
+.logo-preview img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 4px;
+  background-color: white;
+  padding: 0.25rem;
+}
+
+.remove-logo-btn {
+  background-color: #e74c3c;
+  padding: 0.4em 0.8em;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.remove-logo-btn:hover {
+  background-color: #c0392b;
+}
+
+.logo-upload-btn {
+  padding: 0.6em 1.2em;
+  background-color: #3498db;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+  border: none;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: background-color 0.25s;
+  text-align: center;
+  width: fit-content;
+}
+
+.logo-upload-btn:hover {
+  background-color: #2980b9;
+}
+
+.family-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.family-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+  transition: all 0.2s;
+}
+
+.family-history-item:hover {
+  border-color: #4a90e2;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.family-history-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.family-history-select {
+  padding: 0.5em 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  max-width: 120px;
+}
+
+.family-history-select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.family-history-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.family-details-label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.family-history-input {
+  padding: 0.5em 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.family-history-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+/* Addictions Section Styles */
+.addictions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.addictions-checkboxes {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.addiction-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem 1.25rem;
+  background-color: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  user-select: none;
+  flex: 1;
+  max-width: 160px;
+  justify-content: center;
+}
+
+.addiction-checkbox-label:hover {
+  border-color: #4a90e2;
+  background-color: #f0f7ff;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.15);
+}
+
+.addiction-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #4a90e2;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.addiction-checkbox:checked + .addiction-label-text {
+  color: #4a90e2;
+  font-weight: 600;
+}
+
+.addiction-checkbox-label:has(.addiction-checkbox:checked) {
+  border-color: #4a90e2;
+  background-color: #e3f2fd;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.addiction-label-text {
+  font-size: 1rem;
+  color: #333;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.allergies-input-group {
+  margin-top: 0;
+}
+
+.allergies-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.allergies-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.allergies-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+@media (max-width: 768px) {
+  .history-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions-top {
+    flex-direction: column;
+  }
+  
+  .patient-form {
+    padding: 1rem;
+  }
+  
+  .family-history-item {
+    padding: 0.75rem;
+  }
+
+  .addictions-checkboxes {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .addiction-checkbox-label {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media print {
+  .patient-form {
+    padding: 1rem;
+  }
+  
+  .form-section {
+    page-break-inside: avoid;
+  }
+}
+
