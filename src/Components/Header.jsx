@@ -1,9 +1,18 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import './Header.css'
 
 function Header({ hospitalName, hospitalAddress1, hospitalAddress2, companyName }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { isAuthenticated, logout } = useAuth()
   const isHomePage = location.pathname === '/'
+  const isLoginPage = location.pathname === '/login'
+
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <header className="report-header">
@@ -22,11 +31,26 @@ function Header({ hospitalName, hospitalAddress1, hospitalAddress2, companyName 
             </p>
           </div>
         </div>
-        {!isHomePage && (
-          <Link to="/" className="home-button" title="Go to Home">
-            🏠 Home
-          </Link>
-        )}
+        <div className="header-actions-right">
+          {!isLoginPage && (
+            <>
+              {isAuthenticated ? (
+                <button onClick={handleLogout} className="logout-button" title="Logout">
+                  Logout
+                </button>
+              ) : (
+                <Link to="/login" className="login-button" title="Sign In">
+                  Sign In
+                </Link>
+              )}
+            </>
+          )}
+          {!isHomePage && !isLoginPage && (
+            <Link to="/" className="home-button" title="Go to Home">
+              🏠 Home
+            </Link>
+          )}
+        </div>
       </div>
     </header>
   )

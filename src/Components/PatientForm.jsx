@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import { toast } from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 import { calculateBMI, calculateExpectedWeight, exportToExcel } from '../utils/helpers'
 import './PatientForm.css'
 
@@ -79,6 +80,8 @@ const EditableInput = ({ name, value, onChange, type = 'text', placeholder, requ
 function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange }) {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated } = useAuth()
   const isEdit = !!id
   
   const existingPatient = isEdit ? patients.find(p => p.id === id) : null
@@ -263,6 +266,19 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   }
 
   const handleExcelImport = (e) => {
+    if (!isAuthenticated) {
+      toast.error('Authentication required to upload Excel files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      e.target.value = '' // Reset file input
+      // Smooth transition to login
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
+      return
+    }
+
     const file = e.target.files[0]
     if (!file) {
       // User cancelled the file dialog - stay in import mode
@@ -470,17 +486,33 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
               </button>
             </div>
             <div className="import-section-content">
-              <label className="file-upload-btn">
-                Choose Excel File
-                <input 
-                  ref={fileInputRef}
-                  type="file" 
-                  accept=".xlsx,.xls" 
-                  onChange={handleExcelImport}
-                  style={{ display: 'none' }}
-                />
-              </label>
-              <p className="import-help-text">Select an Excel file (.xlsx or .xls) containing patient data</p>
+              {!isAuthenticated ? (
+                <div className="upload-disabled-message">
+                  <div className="lock-icon">🔒</div>
+                  <p className="disabled-text">Please sign in to upload Excel files</p>
+                  <button 
+                    type="button"
+                    className="signin-prompt-btn"
+                    onClick={() => navigate('/login', { state: { from: { pathname: location.pathname } } })}
+                  >
+                    Sign In to Continue
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <label className="file-upload-btn">
+                    Choose Excel File
+                    <input 
+                      ref={fileInputRef}
+                      type="file" 
+                      accept=".xlsx,.xls" 
+                      onChange={handleExcelImport}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                  <p className="import-help-text">Select an Excel file (.xlsx or .xls) containing patient data</p>
+                </>
+              )}
             </div>
           </div>
         )}

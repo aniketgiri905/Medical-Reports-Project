@@ -1,11 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { AuthProvider } from './context/AuthContext'
 import PatientForm from './Components/PatientForm'
 import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
 import AudiometryReport from './Components/AudiometryReport'
 import Header from './Components/Header'
+import Login from './Components/Auth/Login'
 import './App.css'
 
 function App() {
@@ -60,87 +62,116 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#363636',
-            color: '#fff',
-          },
-          success: {
+    <AuthProvider>
+      <div className="app">
+        <Toaster 
+          position="top-right"
+          toastOptions={{
             duration: 3000,
-            iconTheme: {
-              primary: '#4a90e2',
-              secondary: '#fff',
+            style: {
+              background: '#363636',
+              color: '#fff',
+              borderRadius: '8px',
+              padding: '16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
             },
-          },
-          error: {
-            duration: 4000,
-            iconTheme: {
-              primary: '#e74c3c',
-              secondary: '#fff',
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: '#10b981',
+                secondary: '#fff',
+              },
+              style: {
+                background: '#10b981',
+                color: '#fff',
+                borderRadius: '8px',
+                padding: '16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+              },
             },
-          },
-        }}
-      />
-      <Header 
-        hospitalName={settings.hospitalName}
-        hospitalAddress1={settings.hospitalAddress1}
-        hospitalAddress2={settings.hospitalAddress2}
-        companyName={settings.companyName}
-      />
-      <main className="main-content">
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <PatientList 
-                patients={patients} 
-                onDelete={deletePatient}
-              />
-            } 
-          />
-          <Route 
-            path="/new" 
-            element={
-              <PatientForm 
-                onSave={addPatient}
-                onBulkSave={addMultiplePatients}
-                settings={settings}
-                onSettingsChange={setSettings}
-              />
-            } 
-          />
-          <Route 
-            path="/edit/:id" 
-            element={
-              <PatientForm 
-                patients={patients}
-                onSave={updatePatient}
-                settings={settings}
-                onSettingsChange={setSettings}
-              />
-            } 
-          />
-          <Route 
-            path="/patient/:id" 
-            element={
-              <PatientDetails 
-                patients={patients}
-              />
-            } 
-          />
-          <Route 
-            path="/audiometry" 
-            element={
-              <AudiometryReport />
-            } 
-          />
-        </Routes>
-      </main>
-    </div>
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+              },
+              style: {
+                background: '#ef4444',
+                color: '#fff',
+                borderRadius: '8px',
+                padding: '16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                boxShadow: '0 4px 12px rgba(239, 68, 68, 0.3)',
+              },
+            },
+          }}
+        />
+        <Header 
+          hospitalName={settings.hospitalName}
+          hospitalAddress1={settings.hospitalAddress1}
+          hospitalAddress2={settings.hospitalAddress2}
+          companyName={settings.companyName}
+        />
+        <main className="main-content">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <PatientList 
+                  patients={patients} 
+                  onDelete={deletePatient}
+                />
+              } 
+            />
+            <Route 
+              path="/new" 
+              element={
+                <PatientForm 
+                  onSave={addPatient}
+                  onBulkSave={addMultiplePatients}
+                  settings={settings}
+                  onSettingsChange={setSettings}
+                />
+              } 
+            />
+            <Route 
+              path="/edit/:id" 
+              element={
+                <PatientForm 
+                  patients={patients}
+                  onSave={updatePatient}
+                  settings={settings}
+                  onSettingsChange={setSettings}
+                />
+              } 
+            />
+            <Route 
+              path="/patient/:id" 
+              element={
+                <PatientDetails 
+                  patients={patients}
+                />
+              } 
+            />
+            <Route 
+              path="/audiometry" 
+              element={
+                <AudiometryReport />
+              } 
+            />
+            <Route 
+              path="/login" 
+              element={<Login />} 
+            />
+          </Routes>
+        </main>
+      </div>
+    </AuthProvider>
   )
 }
 

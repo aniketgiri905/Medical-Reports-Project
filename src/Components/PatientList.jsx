@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 import { exportToExcel, exportAllToPDF } from '../utils/helpers'
 import './PatientList.css'
 
@@ -8,6 +9,8 @@ function PatientList({ patients, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [openMenuId, setOpenMenuId] = useState(null)
   const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated } = useAuth()
 
   const filteredPatients = patients.filter(patient => 
     patient.patientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -24,24 +27,60 @@ function PatientList({ patients, onDelete }) {
   })
 
   const handleExportAll = () => {
-    if (patients.length === 0) {
-      toast.error('No patients to export')
+    if (!isAuthenticated) {
+      toast.error('Authentication required to export Excel files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
       return
     }
-    exportToExcel(patients, 'all_patients')
-    toast.success('Patients exported successfully!')
+    if (patients.length === 0) {
+      toast.error('No patient records found to export', {
+        icon: '📋',
+      })
+      return
+    }
+    try {
+      exportToExcel(patients, 'all_patients')
+      toast.success(`Successfully exported ${patients.length} patient record(s) to Excel!`, {
+        icon: '📊',
+      })
+    } catch (error) {
+      toast.error('Failed to export Excel file. Please try again.', {
+        icon: '❌',
+      })
+    }
   }
 
   const handleExportAllPDF = () => {
+    if (!isAuthenticated) {
+      toast.error('Authentication required to export PDF files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
+      return
+    }
     if (patients.length === 0) {
-      toast.error('No patients to export')
+      toast.error('No patient records found to export', {
+        icon: '📋',
+      })
       return
     }
     try {
       exportAllToPDF(patients)
-      toast.success(`All ${patients.length} patient reports exported to PDF successfully!`)
+      toast.success(`Successfully exported ${patients.length} patient report(s) to PDF!`, {
+        icon: '📄',
+      })
     } catch (error) {
-      toast.error('Error exporting PDFs: ' + error.message)
+      toast.error('Failed to export PDF files. Please try again.', {
+        icon: '❌',
+      })
     }
   }
 

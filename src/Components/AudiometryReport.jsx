@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import { toast } from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
@@ -9,6 +10,8 @@ import './AudiometryReport.css'
 
 function AudiometryReport() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated } = useAuth()
   const reportRef = useRef(null)
   const rightChartRef = useRef(null)
   const leftChartRef = useRef(null)
@@ -106,6 +109,18 @@ function AudiometryReport() {
   })
 
   const handleExcelImport = (e) => {
+    if (!isAuthenticated) {
+      toast.error('Authentication required to upload Excel files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      e.target.value = '' // Reset file input
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
+      return
+    }
+
     const file = e.target.files[0]
     if (!file) return
 
@@ -781,15 +796,33 @@ function AudiometryReport() {
       <div className="report-header-actions">
         <h1>Audiometry Report Generator</h1>
         <div className="header-buttons">
-          <label className="file-upload-btn">
-            Upload Excel File
-            <input
-              type="file"
-              accept=".xlsx,.xls"
-              onChange={handleExcelImport}
-              style={{ display: 'none' }}
-            />
-          </label>
+          {!isAuthenticated ? (
+            <button 
+              className="file-upload-btn disabled"
+              onClick={() => {
+                toast.error('Authentication required to upload Excel files. Redirecting to login...', {
+                  icon: '🔒',
+                  duration: 3000,
+                })
+                setTimeout(() => {
+                  navigate('/login', { state: { from: { pathname: location.pathname } } })
+                }, 500)
+              }}
+              title="Sign in required to upload Excel files"
+            >
+              🔒 Upload Excel File (Sign In Required)
+            </button>
+          ) : (
+            <label className="file-upload-btn">
+              Upload Excel File
+              <input
+                type="file"
+                accept=".xlsx,.xls"
+                onChange={handleExcelImport}
+                style={{ display: 'none' }}
+              />
+            </label>
+          )}
           <button onClick={handleExportPDF} className="export-pdf-btn" disabled={!reportData.companyName}>
             Export PDF
           </button>

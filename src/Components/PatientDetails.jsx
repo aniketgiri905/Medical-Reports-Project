@@ -1,11 +1,38 @@
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 import { exportToPDF } from '../utils/helpers'
 import './PatientDetails.css'
 
 function PatientDetails({ patients }) {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const { isAuthenticated } = useAuth()
   const patient = patients.find(p => p.id === id)
+
+  const handleExportPDF = () => {
+    if (!isAuthenticated) {
+      toast.error('Authentication required to export PDF files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
+      return
+    }
+    try {
+      exportToPDF(patient)
+      toast.success('Patient report exported to PDF successfully!', {
+        icon: '📄',
+      })
+    } catch (error) {
+      toast.error('Failed to export PDF. Please try again.', {
+        icon: '❌',
+      })
+    }
+  }
 
   if (!patient) {
     return (
@@ -23,7 +50,7 @@ function PatientDetails({ patients }) {
       <div className="details-header">
         <h1>Patient Medical Report Details</h1>
         <div className="header-actions">
-          <button onClick={() => exportToPDF(patient)} className="print-btn">
+          <button onClick={handleExportPDF} className="print-btn">
             Export PDF
           </button>
           <Link to={`/edit/${patient.id}`} className="edit-btn">
