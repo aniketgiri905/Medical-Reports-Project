@@ -217,27 +217,27 @@ function PatientDetails({ patients }) {
               )}
             </div>
           </div>
-        </div>
-
-        {/* Family History Section */}
-        <div className="details-section">
-          <h2>Family History</h2>
-          <div className="details-grid">
-            <div className="detail-item full-width">
-              <span className="detail-label">Father:</span>
-              <span className="detail-value">
-                {patient.fatherHistory?.has 
-                  ? (patient.fatherHistory.details || 'Yes') 
-                  : 'NAD'}
-              </span>
-            </div>
-            <div className="detail-item full-width">
-              <span className="detail-label">Mother:</span>
-              <span className="detail-value">
-                {patient.motherHistory?.has 
-                  ? (patient.motherHistory.details || 'Yes') 
-                  : 'NAD'}
-              </span>
+          
+          {/* Family History within Medical History */}
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #ddd' }}>
+            <h3 style={{ marginBottom: '15px', fontSize: '1.1em', fontWeight: '600' }}>Family History</h3>
+            <div className="details-grid">
+              <div className="detail-item full-width">
+                <span className="detail-label">Father:</span>
+                <span className="detail-value">
+                  {patient.fatherHistory?.has 
+                    ? (patient.fatherHistory.details || 'Yes') 
+                    : 'NAD'}
+                </span>
+              </div>
+              <div className="detail-item full-width">
+                <span className="detail-label">Mother:</span>
+                <span className="detail-value">
+                  {patient.motherHistory?.has 
+                    ? (patient.motherHistory.details || 'Yes') 
+                    : 'NAD'}
+                </span>
+              </div>
             </div>
           </div>
         </div>

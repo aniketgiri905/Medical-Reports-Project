@@ -8,6 +8,16 @@ export const calculateBMI = (height, weight) => {
   return weight / (heightInMeters * heightInMeters)
 }
 
+export const calculateExpectedWeight = (height, gender) => {
+  if (!height || height <= 0) return 0
+  const genderLower = (gender || '').toLowerCase()
+  if (genderLower === 'female' || genderLower === 'f') {
+    return height - 105
+  }
+  // Default to Male formula
+  return height - 100
+}
+
 // Core function to generate PDF content for a patient
 // Can work with an existing doc instance (for multi-patient export) or create a new one
 const generatePatientPDFContent = (patientData, existingDoc = null, startNewPage = false) => {
@@ -265,8 +275,13 @@ const generatePatientPDFContent = (patientData, existingDoc = null, startNewPage
   const maxLines = Math.max(pastLines.length, presentLines.length)
   yPos = pastStartY + (maxLines * lineHeight) + 2
 
-  // ========== FAMILY HISTORY SECTION ==========
-  addSectionHeader('Family History')
+  // Family History within Medical History section
+  checkPageBreak(lineHeight + 3)
+  yPos += 2 // Add spacing before family history
+  doc.setFont(undefined, 'bold')
+  doc.setFontSize(11)
+  doc.text('Family History', col1X, yPos)
+  yPos += lineHeight + 1
 
   const fatherValue = patientData.fatherHistory?.has 
     ? (patientData.fatherHistory.details || 'Yes') 

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import { toast } from 'react-hot-toast'
-import { calculateBMI, exportToExcel } from '../utils/helpers'
+import { calculateBMI, calculateExpectedWeight, exportToExcel } from '../utils/helpers'
 import './PatientForm.css'
 
 // Reusable Input Component with Checkmark/Pencil Icon
@@ -186,17 +186,15 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   useEffect(() => {
     if (formData.height && formData.weight) {
       const bmi = calculateBMI(parseFloat(formData.height), parseFloat(formData.weight))
-      // Calculate Expected Weight = BMI × (Height in meters)²
-      const heightInMeters = parseFloat(formData.height) / 100
-      const expectedWeight = bmi * (heightInMeters * heightInMeters)
+      // Calculate Expected Weight based on gender: Male = Height - 100, Female = Height - 105
+      const expectedWeight = calculateExpectedWeight(parseFloat(formData.height), formData.gender || formData.sex)
       setFormData(prev => ({ ...prev, bmi: bmi.toFixed(2), expectedWeight: expectedWeight.toFixed(2) }))
-    } else if (formData.height && formData.bmi) {
-      // If BMI exists but weight doesn't, calculate Expected Weight from BMI
-      const heightInMeters = parseFloat(formData.height) / 100
-      const expectedWeight = parseFloat(formData.bmi) * (heightInMeters * heightInMeters)
+    } else if (formData.height) {
+      // Calculate Expected Weight based on gender even if weight/BMI is not provided
+      const expectedWeight = calculateExpectedWeight(parseFloat(formData.height), formData.gender || formData.sex)
       setFormData(prev => ({ ...prev, expectedWeight: expectedWeight.toFixed(2) }))
     }
-  }, [formData.height, formData.weight, formData.bmi])
+  }, [formData.height, formData.weight, formData.bmi, formData.gender, formData.sex])
 
   // Automatically trigger file input when import mode is selected
   useEffect(() => {
@@ -306,7 +304,7 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           height: row['Height (cm)'] || row['Height'] || '',
           weight: row['Weight (kg)'] || row['Weight'] || '',
           bmi: row['BMI'] || (row['Height (cm)'] && row['Weight (kg)'] ? calculateBMI(parseFloat(row['Height (cm)']), parseFloat(row['Weight (kg)'])).toFixed(2) : '') || (row['Height'] && row['Weight'] ? calculateBMI(parseFloat(row['Height']), parseFloat(row['Weight'])).toFixed(2) : ''),
-          expectedWeight: row['Expected Weight (kg)'] || row['Expected Weight'] || (row['Height (cm)'] && row['BMI'] ? (parseFloat(row['BMI']) * (parseFloat(row['Height (cm)']) / 100 * parseFloat(row['Height (cm)']) / 100)).toFixed(2) : '') || (row['Height'] && row['BMI'] ? (parseFloat(row['BMI']) * (parseFloat(row['Height']) / 100 * parseFloat(row['Height']) / 100)).toFixed(2) : '') || (row['Height (cm)'] && row['Weight (kg)'] ? (calculateBMI(parseFloat(row['Height (cm)']), parseFloat(row['Weight (kg)'])) * (parseFloat(row['Height (cm)']) / 100 * parseFloat(row['Height (cm)']) / 100)).toFixed(2) : '') || (row['Height'] && row['Weight'] ? (calculateBMI(parseFloat(row['Height']), parseFloat(row['Weight'])) * (parseFloat(row['Height']) / 100 * parseFloat(row['Height']) / 100)).toFixed(2) : ''),
+          expectedWeight: row['Expected Weight (kg)'] || row['Expected Weight'] || ((row['Height (cm)'] || row['Height']) && (row['Gender'] || row['Sex']) ? calculateExpectedWeight(parseFloat(row['Height (cm)'] || row['Height']), row['Gender'] || row['Sex']).toFixed(2) : ''),
           chest: row['Chest (cm)'] || row['Chest'] || '',
           bpSystolic: row['B.P. Systolic (mmHg)'] || row['B.P. Systolic'] || row['B.P(systolic)'] || row['BP Systolic'] || row['B.P Systolic'] || '',
           bpDiastolic: row['B.P. Diastolic (mmHg)'] || row['B.P. Diastolic'] || row['B.P(diastolic)'] || row['BP Diastolic'] || row['B.P Diastolic'] || '',
@@ -882,58 +880,59 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
               </button>
             </div>
           </div>
-        </div>
-
-        <div className="form-section">
-          <h2>Family History</h2>
-          <div className="family-history-container">
-            <div className="family-history-item">
-              <label className="family-history-label">Father</label>
-              <select 
-                value={formData.fatherHistory.has ? 'yes' : 'no'}
-                onChange={(e) => handleFamilyHistoryChange('fatherHistory', 'has', e.target.value)}
-                className="family-history-select"
-              >
-                <option value="yes">Yes</option>
-                <option value="no">NAD</option>
-              </select>
-              {formData.fatherHistory.has && (
-                <div className="family-history-details">
-                  <label className="family-details-label">Details</label>
-                  <EditableInput
-                    type="text"
-                    name="fatherHistoryDetails"
-                    value={formData.fatherHistory.details}
-                    onChange={(e) => handleFamilyHistoryChange('fatherHistory', 'details', e.target.value)}
-                    placeholder="Enter father's medical history details"
-                    className="family-history-input"
-                  />
-                </div>
-              )}
-            </div>
-            <div className="family-history-item">
-              <label className="family-history-label">Mother</label>
-              <select 
-                value={formData.motherHistory.has ? 'yes' : 'no'}
-                onChange={(e) => handleFamilyHistoryChange('motherHistory', 'has', e.target.value)}
-                className="family-history-select"
-              >
-                <option value="yes">Yes</option>
-                <option value="no">NAD</option>
-              </select>
-              {formData.motherHistory.has && (
+          
+          {/* Family History within Medical History */}
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #ddd' }}>
+            <h3 style={{ marginBottom: '15px', fontSize: '1.1em', fontWeight: '600', color: '#2c3e50' }}>Family History</h3>
+            <div className="family-history-container" style={{ display: 'flex', flexDirection: 'row', gap: '20px', flexWrap: 'wrap' }}>
+              <div className="family-history-item">
+                <label className="family-history-label">Father</label>
+                <select 
+                  value={formData.fatherHistory.has ? 'yes' : 'no'}
+                  onChange={(e) => handleFamilyHistoryChange('fatherHistory', 'has', e.target.value)}
+                  className="family-history-select"
+                >
+                  <option value="yes">Yes</option>
+                  <option value="no">NAD</option>
+                </select>
+                {formData.fatherHistory.has && (
                   <div className="family-history-details">
                     <label className="family-details-label">Details</label>
                     <EditableInput
                       type="text"
-                      name="motherHistoryDetails"
-                      value={formData.motherHistory.details}
-                      onChange={(e) => handleFamilyHistoryChange('motherHistory', 'details', e.target.value)}
-                      placeholder="Enter mother's medical history details"
+                      name="fatherHistoryDetails"
+                      value={formData.fatherHistory.details}
+                      onChange={(e) => handleFamilyHistoryChange('fatherHistory', 'details', e.target.value)}
+                      placeholder="Enter father's medical history details"
                       className="family-history-input"
                     />
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
+              <div className="family-history-item">
+                <label className="family-history-label">Mother</label>
+                <select 
+                  value={formData.motherHistory.has ? 'yes' : 'no'}
+                  onChange={(e) => handleFamilyHistoryChange('motherHistory', 'has', e.target.value)}
+                  className="family-history-select"
+                >
+                  <option value="yes">Yes</option>
+                  <option value="no">NAD</option>
+                </select>
+                {formData.motherHistory.has && (
+                    <div className="family-history-details">
+                      <label className="family-details-label">Details</label>
+                      <EditableInput
+                        type="text"
+                        name="motherHistoryDetails"
+                        value={formData.motherHistory.details}
+                        onChange={(e) => handleFamilyHistoryChange('motherHistory', 'details', e.target.value)}
+                        placeholder="Enter mother's medical history details"
+                        className="family-history-input"
+                      />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
