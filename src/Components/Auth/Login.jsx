@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../../context/AuthContext'
 import './Auth.css'
+import '../Header.css'
 
-const VALID_CREDENTIALS = {
-  username: 'adityagoswami',
-  password: 'Aditya@2002'
-}
+const VALID_CREDENTIALS = [
+  {
+    username: 'adityagoswami',
+    password: 'Aditya@2002'
+  },
+  {
+    username: 'aniket',
+    password: 'aniket'
+  }
+]
 
 function Login() {
   const [username, setUsername] = useState('')
@@ -31,10 +38,11 @@ function Login() {
     setLoading(true)
 
     setTimeout(() => {
-      if (
-        username === VALID_CREDENTIALS.username &&
-        password === VALID_CREDENTIALS.password
-      ) {
+      const isValid = VALID_CREDENTIALS.some(
+        cred => cred.username === username && cred.password === password
+      )
+      
+      if (isValid) {
         login()
         toast.success('Login successful')
         navigate(from, { replace: true })
@@ -53,6 +61,9 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
+        <Link to="/" className="home-button" title="Go to Home">
+          🏠 Home
+        </Link>
         <h2>Welcome Back</h2>
         <p className="subtitle">Sign in to continue</p>
 
