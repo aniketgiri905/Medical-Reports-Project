@@ -838,24 +838,67 @@
 }
 
 @media (max-width: 768px) {
-  .history-container {
-    grid-template-columns: 1fr;
+  .patient-form-container {
+    border-radius: 8px;
   }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .form-actions-top {
-    flex-direction: column;
-  }
-  
+
   .patient-form {
     padding: 1rem;
   }
-  
+
+  .form-actions-top {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .file-upload-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .form-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-section h3 {
+    font-size: 1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .history-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .history-column h3 {
+    font-size: 1rem;
+  }
+
+  .history-item {
+    padding: 0.75rem;
+  }
+
   .family-history-item {
     padding: 0.75rem;
+  }
+
+  .family-history-select {
+    width: 100%;
   }
 
   .addictions-checkboxes {
@@ -865,11 +908,87 @@
 
   .addiction-checkbox-label {
     width: 100%;
+    max-width: 100%;
     min-width: auto;
   }
 
   .conditions-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .vision-examination-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .vision-pair {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .vision-pair input {
+    width: 100%;
+  }
+
+  .input-with-icon,
+  .textarea-with-icon {
+    width: 100%;
+  }
+
+  .field-action-icon {
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    font-size: 1.1rem;
+  }
+
+  .textarea-with-icon .field-action-icon {
+    top: auto;
+    bottom: 8px;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-form {
+    padding: 0.75rem;
+  }
+
+  .form-section h2 {
+    font-size: 1.2rem;
+    padding-left: 0.5rem;
+  }
+
+  .form-section h3 {
+    font-size: 0.95rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.9rem;
+    padding: 0.6em 0.75em;
+  }
+
+  .history-item input {
+    font-size: 0.9rem;
+  }
+
+  .add-button,
+  .remove-button {
+    padding: 0.5em 1em;
+    font-size: 0.85rem;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 0.75em 1em;
+    font-size: 1rem;
   }
 }
 

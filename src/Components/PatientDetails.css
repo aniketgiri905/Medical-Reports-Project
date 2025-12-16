@@ -223,25 +223,105 @@
   .details-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .details-header h1 {
+    font-size: 1.5rem;
   }
 
   .header-actions {
     width: 100%;
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .edit-btn,
   .back-btn {
     width: 100%;
     text-align: center;
+    padding: 0.75em 1em;
+  }
+
+  .details-section {
+    padding: 1rem;
+  }
+
+  .details-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
   }
 
   .details-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .detail-label {
+    font-size: 0.9rem;
+    min-width: auto;
+  }
+
+  .detail-value {
+    font-size: 0.95rem;
+    width: 100%;
   }
 
   .history-section {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .history-column h3 {
+    font-size: 1rem;
+  }
+
+  .history-list {
+    font-size: 0.9rem;
+  }
+
+  .remarks-content {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-details-container {
+    padding: 0.75rem;
+  }
+
+  .details-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .details-section {
+    padding: 0.75rem;
+  }
+
+  .details-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .detail-label {
+    font-size: 0.85rem;
+  }
+
+  .detail-value {
+    font-size: 0.9rem;
+  }
+
+  .history-list {
+    font-size: 0.85rem;
+  }
+
+  .remarks-content {
+    font-size: 0.85rem;
   }
 }
 

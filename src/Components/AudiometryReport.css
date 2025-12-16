@@ -393,37 +393,173 @@
 }
 
 @media (max-width: 768px) {
+  .audiometry-report-container {
+    padding: 1rem;
+  }
+
   .report-header-actions {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .report-header-actions h1 {
+    font-size: 1.4rem;
   }
 
   .header-buttons {
     width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .header-buttons button,
   .header-buttons label {
-    flex: 1;
+    width: 100%;
     text-align: center;
+    padding: 0.75em 1em;
   }
 
   .audiometry-form-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  .audiogram-charts-section {
-    grid-template-columns: 1fr;
+  .report-form-section {
+    padding: 1rem;
+  }
+
+  .report-form-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .audiometry-data-section {
+    padding: 1rem;
+  }
+
+  .print-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .company-name-print {
+    font-size: 0.9rem;
+  }
+
+  .company-name-value {
+    font-size: 1.2rem;
   }
 
   .info-row {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .info-item {
+    width: 100%;
+  }
+
+  .info-item strong {
+    min-width: auto;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .audiometry-table-container h3 {
+    font-size: 1.1rem;
+  }
+
+  .audiometry-table {
+    font-size: 0.85rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .audiometry-table thead,
+  .audiometry-table tbody,
+  .audiometry-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .audiometry-table th,
+  .audiometry-table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .frequency-input {
+    font-size: 0.8rem;
+    padding: 0.4rem;
+  }
+
+  .audiogram-charts-section {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .chart-container {
+    padding: 1rem;
+  }
+
+  .chart-title {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+  }
+
+  .chart-wrapper {
+    padding: 0.5rem;
+    overflow-x: auto;
   }
 
   .summary-section {
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .summary-item {
+    font-size: 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .audiometry-report-container {
+    padding: 0.75rem;
+  }
+
+  .report-header-actions h1 {
+    font-size: 1.2rem;
+  }
+
+  .report-form-section {
+    padding: 0.75rem;
+  }
+
+  .audiometry-data-section {
+    padding: 0.75rem;
+  }
+
+  .audiometry-table th,
+  .audiometry-table td {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+  }
+
+  .frequency-input {
+    font-size: 0.75rem;
+    padding: 0.3rem;
+  }
+
+  .chart-container {
+    padding: 0.75rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
   }
 }
 

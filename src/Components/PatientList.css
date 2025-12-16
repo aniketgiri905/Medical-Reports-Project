@@ -330,46 +330,131 @@
 }
 
 @media (max-width: 768px) {
+  .patient-list-container {
+    padding: 1rem;
+  }
+
+  .list-header {
+    gap: 1rem;
+  }
+
+  .list-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-title-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .create-new-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+  }
+
+  .audiometry-btn,
+  .export-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75em 1em;
+  }
+
   .table-container {
-    overflow: auto;
-    max-height: calc(100vh - 250px);
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 280px);
+    -webkit-overflow-scrolling: touch;
   }
   
   .patients-table {
-    min-width: 600px;
+    min-width: 700px;
+    font-size: 0.9rem;
   }
   
   .patients-table th,
   .patients-table td {
     padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .sr-no-column {
+    width: 50px;
+  }
+
+  .actions-column {
+    width: 60px;
+  }
+
+  .patient-name-link {
     font-size: 0.9rem;
   }
-  
-  .header-title-section {
-    flex-direction: column;
-    align-items: stretch;
+
+  .empty-state {
+    padding: 3rem 1rem;
   }
-  
-  .list-header h1 {
-    font-size: 1.5rem;
+
+  .empty-state p {
+    font-size: 1.1rem;
   }
-  
-  .create-new-btn {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .header-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .search-input {
-    max-width: 100%;
-  }
-  
+}
+
+@media (max-width: 480px) {
   .patient-list-container {
-    padding: 1rem;
+    padding: 0.75rem;
+  }
+
+  .list-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .patients-table {
+    min-width: 650px;
+    font-size: 0.8rem;
+  }
+
+  .patients-table th,
+  .patients-table td {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .sr-no-column {
+    width: 45px;
+  }
+
+  .actions-column {
+    width: 55px;
+  }
+
+  .actions-menu-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 1.3rem;
+  }
+
+  .actions-menu {
+    right: -10px;
+    min-width: 100px;
+  }
+
+  .menu-item {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
   }
 }
 
