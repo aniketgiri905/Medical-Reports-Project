@@ -1,10 +1,11 @@
 .patient-details-container {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 131, 143, 0.1);
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  border: 1px solid #e0f2f1;
 }
 
 .details-header {
@@ -19,9 +20,11 @@
 }
 
 .details-header h1 {
-  color: #2c3e50;
+  color: var(--medical-primary-dark);
   margin: 0;
   font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
 .header-actions {
@@ -31,35 +34,41 @@
 
 .print-btn {
   padding: 0.75em 1.5em;
-  background-color: #27ae60;
+  background-color: var(--medical-accent);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.25s;
+  transition: all 0.25s;
   font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(38, 166, 154, 0.3);
 }
 
 .print-btn:hover {
-  background-color: #229954;
+  background-color: var(--medical-success);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(38, 166, 154, 0.4);
 }
 
 .edit-btn {
   padding: 0.75em 1.5em;
-  background-color: #4a90e2;
+  background-color: var(--medical-primary);
   color: white;
   text-decoration: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 500;
-  transition: background-color 0.25s;
+  transition: all 0.25s;
   border: none;
   cursor: pointer;
   font-size: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 131, 143, 0.3);
 }
 
 .edit-btn:hover {
-  background-color: #357abd;
+  background-color: var(--medical-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
 }
 
 .back-btn {
@@ -92,11 +101,13 @@
 }
 
 .details-section h2 {
-  color: #2c3e50;
+  color: var(--medical-primary-dark);
   margin: 0 0 1.5rem 0;
   font-size: 1.4rem;
+  font-weight: 700;
   padding-bottom: 0.75rem;
-  border-bottom: 2px solid #4a90e2;
+  border-bottom: 3px solid var(--medical-primary);
+  letter-spacing: 0.3px;
 }
 
 .details-grid {
@@ -279,45 +290,40 @@
   }
 
   .details-section h2 {
-    font-size: 0.75rem !important;
-    margin: 0 0 0.2rem 0 !important;
-    padding-bottom: 0.15rem !important;
+    font-size: 1.1rem !important;
+    margin: 0 0 0.3rem 0 !important;
+    padding-bottom: 0.2rem !important;
     border-bottom: 1px solid #999 !important;
     color: #000 !important;
     font-weight: bold !important;
-    line-height: 1.2 !important;
+    line-height: 1.3 !important;
   }
 
   .details-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.2rem !important;
-    margin-bottom: 0.15rem !important;
+    gap: 0.3rem !important;
+    margin-bottom: 0.2rem !important;
   }
 
   .detail-item {
-    gap: 0.05rem !important;
-    margin-bottom: 0.15rem !important;
-    flex-direction: row !important;
-    align-items: baseline !important;
+    gap: 0.1rem !important;
+    margin-bottom: 0.2rem !important;
   }
 
   .detail-label {
-    font-size: 0.6rem !important;
+    font-size: 0.9rem !important;
     font-weight: 600 !important;
     color: #000 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.2px !important;
-    line-height: 1.1 !important;
-    margin-right: 0.3rem !important;
-    white-space: nowrap !important;
+    letter-spacing: 0.3px !important;
+    line-height: 1.2 !important;
   }
 
   .detail-value {
-    font-size: 0.65rem !important;
+    font-size: 0.95rem !important;
     color: #000 !important;
     padding: 0 !important;
-    line-height: 1.2 !important;
-    white-space: nowrap !important;
+    line-height: 1.3 !important;
   }
 
   .detail-item.full-width {
@@ -335,11 +341,11 @@
   }
 
   .history-subsection h3 {
-    font-size: 0.7rem !important;
-    margin: 0 0 0.2rem 0 !important;
+    font-size: 1rem !important;
+    margin: 0 0 0.3rem 0 !important;
     color: #000 !important;
     font-weight: bold !important;
-    line-height: 1.2 !important;
+    line-height: 1.3 !important;
   }
 
   .history-list {
@@ -348,33 +354,33 @@
   }
 
   .history-list li {
-    padding: 0.15rem 0.25rem !important;
-    margin-bottom: 0.15rem !important;
+    padding: 0.2rem 0.3rem !important;
+    margin-bottom: 0.2rem !important;
     background-color: transparent !important;
     border-left: 1.5px solid #000 !important;
     border-radius: 0 !important;
-    font-size: 0.65rem !important;
-    line-height: 1.2 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
     color: #000 !important;
   }
 
   .no-data {
-    font-size: 0.65rem !important;
-    padding: 0.15rem !important;
+    font-size: 0.95rem !important;
+    padding: 0.2rem !important;
     background-color: transparent !important;
     color: #666 !important;
   }
 
   .remarks-content {
     background-color: transparent !important;
-    padding: 0.2rem !important;
+    padding: 0.3rem !important;
     border-left: 1.5px solid #000 !important;
     border-radius: 0 !important;
   }
 
   .remarks-content p {
-    font-size: 0.65rem !important;
-    line-height: 1.3 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
     color: #000 !important;
     margin: 0 !important;
   }

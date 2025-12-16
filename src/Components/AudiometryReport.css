@@ -1,0 +1,428 @@
+.audiometry-report-wrapper {
+  width: 100%;
+}
+
+.audiometry-report-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 131, 143, 0.1);
+  padding: 2rem;
+  border: 1px solid #e0f2f1;
+}
+
+.report-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--medical-primary-light);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.report-header-actions h1 {
+  color: var(--medical-primary-dark);
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.file-upload-btn {
+  padding: 0.75em 1.5em;
+  background-color: var(--medical-accent);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(38, 166, 154, 0.3);
+}
+
+.file-upload-btn:hover {
+  background-color: var(--medical-success);
+  box-shadow: 0 4px 10px rgba(38, 166, 154, 0.4);
+  transform: translateY(-1px);
+}
+
+.export-pdf-btn {
+  padding: 0.75em 1.5em;
+  background-color: var(--medical-primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 2px 6px rgba(0, 131, 143, 0.3);
+}
+
+.export-pdf-btn:hover:not(:disabled) {
+  background-color: var(--medical-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 131, 143, 0.4);
+}
+
+.export-pdf-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  padding: 0.75em 1.5em;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.back-btn:hover {
+  background-color: #7f8c8d;
+}
+
+.report-form-section {
+  margin-bottom: 2rem;
+  padding: 1.75rem;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.report-form-section h2 {
+  color: var(--medical-primary-dark);
+  margin-bottom: 1.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-left: 4px solid var(--medical-primary);
+  padding-left: 0.75rem;
+  letter-spacing: 0.2px;
+}
+
+.audiometry-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem 1.25rem;
+}
+
+.audiometry-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.audiometry-form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.audiometry-form-group input,
+.audiometry-form-group select {
+  padding: 0.6em 0.8em;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  background-color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #111827;
+  line-height: 1.5;
+  min-height: 38px;
+}
+
+.audiometry-form-group input:hover,
+.audiometry-form-group select:hover {
+  border-color: #9ca3af;
+}
+
+.audiometry-form-group input:focus,
+.audiometry-form-group select:focus {
+  outline: none;
+  border-color: var(--medical-primary);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.1);
+}
+
+.audiometry-form-group input::placeholder {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.audiometry-form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75em center;
+  padding-right: 2.5em;
+}
+
+.required-asterisk {
+  color: #ef5350;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* Report Display Section */
+.audiometry-data-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.print-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--medical-primary);
+}
+
+.print-header h2 {
+  color: var(--medical-primary-dark);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.company-name-print {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #555;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.company-name-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #555;
+}
+
+.patient-info-section {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.info-row {
+  display: flex;  
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.info-item strong {
+  min-width: 140px;
+  margin-right: 12px;
+}
+
+.info-row-first {
+  margin-bottom: 1rem;
+}
+
+.info-row-second {
+  margin-bottom: 0;
+}
+
+.info-item {
+  display: flex;
+  white-space: nowrap;
+  width: 33.33%;
+}
+
+.info-label {
+  color: var(--medical-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.info-value {
+  color: #000000;
+  font-weight: normal;
+}
+
+.audiometry-tables-section {
+  margin-bottom: 2rem;
+}
+
+.audiometry-table-container h3 {
+  color: var(--medical-primary-dark);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.audiometry-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audiometry-table thead {
+  background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
+  color: white;
+}
+
+.audiometry-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.audiometry-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.audiometry-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.frequency-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.frequency-input:focus {
+  outline: none;
+  border-color: var(--medical-primary);
+  box-shadow: 0 0 0 2px rgba(0, 131, 143, 0.1);
+}
+
+.audiogram-charts-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #e0f2f1;
+}
+
+.chart-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+}
+
+.left-ear-title,
+.right-ear-title {
+  color: #1976d2;
+  background-color: #e3f2fd;
+  border: 2px solid #1976d2;
+}
+
+.chart-wrapper {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.summary-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem;
+  background: #e8f5f6;
+  border-radius: 8px;
+  border: 1px solid var(--medical-primary-light);
+}
+
+.summary-item {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.summary-item strong {
+  color: var(--medical-primary-dark);
+  margin-right: 0.5rem;
+}
+
+@media print {
+  .report-header-actions,
+  .report-form-section {
+    display: none !important;
+  }
+
+  .audiometry-data-section {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .chart-container {
+    page-break-inside: avoid;
+  }
+}
+
+@media (max-width: 1200px) {
+  .audiometry-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .report-header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-buttons {
+    width: 100%;
+  }
+
+  .header-buttons button,
+  .header-buttons label {
+    flex: 1;
+    text-align: center;
+  }
+
+  .audiometry-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audiogram-charts-section {
+    grid-template-columns: 1fr;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .summary-section {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+

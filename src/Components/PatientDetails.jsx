@@ -1,4 +1,5 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
+import { exportToPDF } from '../utils/helpers'
 import './PatientDetails.css'
 
 function PatientDetails({ patients }) {
@@ -22,8 +23,8 @@ function PatientDetails({ patients }) {
       <div className="details-header">
         <h1>Patient Medical Report Details</h1>
         <div className="header-actions">
-          <button onClick={() => window.print()} className="print-btn">
-            Print Report
+          <button onClick={() => exportToPDF(patient)} className="print-btn">
+            Export PDF
           </button>
           <Link to={`/edit/${patient.id}`} className="edit-btn">
             Edit Report
@@ -74,45 +75,6 @@ function PatientDetails({ patients }) {
           </div>
         </div>
 
-        {/* Medical Report Details Section */}
-        <div className="details-section">
-          <h2>Medical Report Details</h2>
-          <div className="details-grid">
-            <div className="detail-item">
-              <span className="detail-label">Medical Test Date:</span>
-              <span className="detail-value">{patient.medicalTestDate || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Certificate No:</span>
-              <span className="detail-value">{patient.certNo || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Name:</span>
-              <span className="detail-value">{patient.patientName || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Emp Code:</span>
-              <span className="detail-value">{patient.empCode || patient.empId || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Age:</span>
-              <span className="detail-value">{patient.age || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Sex:</span>
-              <span className="detail-value">{patient.sex || patient.gender || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Designation:</span>
-              <span className="detail-value">{patient.designation || 'N/A'}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Department Name:</span>
-              <span className="detail-value">{patient.departmentName || patient.department || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-
         {/* Physiological Data Section */}
         <div className="details-section">
           <h2>Physiological Data</h2>
@@ -158,6 +120,38 @@ function PatientDetails({ patients }) {
           <div className="history-section">
             <div className="history-subsection">
               <h3>Past Medical History</h3>
+              {/* Medical Conditions */}
+              {(patient.pastHypertension === 'Yes' || patient.pastDiabetes === 'Yes' || 
+                patient.pastAsthma === 'Yes' || patient.pastChestPain === 'Yes') && (
+                <div className="medical-conditions-subsection">
+                  <div className="medical-conditions-grid">
+                    {patient.pastHypertension === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Hypertension:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.pastDiabetes === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Diabetes:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.pastAsthma === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Asthma:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.pastChestPain === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Chest Pain:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               {patient.pastHistory && patient.pastHistory.length > 0 && patient.pastHistory[0] ? (
                 <ul className="history-list">
                   {patient.pastHistory.map((item, index) => (
@@ -165,11 +159,48 @@ function PatientDetails({ patients }) {
                   ))}
                 </ul>
               ) : (
-                <p className="no-data">No past medical history recorded</p>
+                (!patient.pastHypertension || patient.pastHypertension === 'No') &&
+                (!patient.pastDiabetes || patient.pastDiabetes === 'No') &&
+                (!patient.pastAsthma || patient.pastAsthma === 'No') &&
+                (!patient.pastChestPain || patient.pastChestPain === 'No') && (
+                  <p className="no-data">No past medical history recorded</p>
+                )
               )}
             </div>
             <div className="history-subsection">
               <h3>Present Medical History</h3>
+              {/* Medical Conditions */}
+              {(patient.presentHypertension === 'Yes' || patient.presentDiabetes === 'Yes' || 
+                patient.presentAsthma === 'Yes' || patient.presentChestPain === 'Yes') && (
+                <div className="medical-conditions-subsection">
+                  <div className="medical-conditions-grid">
+                    {patient.presentHypertension === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Hypertension:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.presentDiabetes === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Diabetes:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.presentAsthma === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Asthma:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                    {patient.presentChestPain === 'Yes' && (
+                      <div className="detail-item">
+                        <span className="detail-label">Chest Pain:</span>
+                        <span className="detail-value">Yes</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               {patient.presentHistory && patient.presentHistory.length > 0 && patient.presentHistory[0] ? (
                 <ul className="history-list">
                   {patient.presentHistory.map((item, index) => (
@@ -177,7 +208,12 @@ function PatientDetails({ patients }) {
                   ))}
                 </ul>
               ) : (
-                <p className="no-data">No present medical history recorded</p>
+                (!patient.presentHypertension || patient.presentHypertension === 'No') &&
+                (!patient.presentDiabetes || patient.presentDiabetes === 'No') &&
+                (!patient.presentAsthma || patient.presentAsthma === 'No') &&
+                (!patient.presentChestPain || patient.presentChestPain === 'No') && (
+                  <p className="no-data">No present medical history recorded</p>
+                )
               )}
             </div>
           </div>
@@ -192,7 +228,7 @@ function PatientDetails({ patients }) {
               <span className="detail-value">
                 {patient.fatherHistory?.has 
                   ? (patient.fatherHistory.details || 'Yes') 
-                  : 'No'}
+                  : 'NAD'}
               </span>
             </div>
             <div className="detail-item full-width">
@@ -200,8 +236,55 @@ function PatientDetails({ patients }) {
               <span className="detail-value">
                 {patient.motherHistory?.has 
                   ? (patient.motherHistory.details || 'Yes') 
-                  : 'No'}
+                  : 'NAD'}
               </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Vision Examination Section */}
+        <div className="details-section">
+          <h2>Vision Examination</h2>
+          <div className="details-grid">
+            <div className="detail-item">
+              <span className="detail-label">Vision Colour:</span>
+              <span className="detail-value">{patient.visionColor || 'N/A'}</span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Vision Distance Right:</span>
+              <span className="detail-value">
+                {patient.visionDistanceRight1 && patient.visionDistanceRight2 
+                  ? `${patient.visionDistanceRight1}/${patient.visionDistanceRight2}`
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Vision Distance Left:</span>
+              <span className="detail-value">
+                {patient.visionDistanceLeft1 && patient.visionDistanceLeft2 
+                  ? `${patient.visionDistanceLeft1}/${patient.visionDistanceLeft2}`
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Vision Near Right:</span>
+              <span className="detail-value">
+                {patient.visionNearRight1 && patient.visionNearRight2 
+                  ? `${patient.visionNearRight1}/${patient.visionNearRight2}`
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Vision Near Left:</span>
+              <span className="detail-value">
+                {patient.visionNearLeft1 && patient.visionNearLeft2 
+                  ? `${patient.visionNearLeft1}/${patient.visionNearLeft2}`
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className="detail-item">
+              <span className="detail-label">Glasses:</span>
+              <span className="detail-value">{patient.glasses || 'N/A'}</span>
             </div>
           </div>
         </div>
@@ -245,6 +328,10 @@ function PatientDetails({ patients }) {
               <span className="detail-label">Pulmonary Function Test:</span>
               <span className="detail-value">{patient.pulmonaryFunctionTest || 'N/A'}</span>
             </div>
+            <div className="detail-item full-width">
+              <span className="detail-label">Audiometry:</span>
+              <span className="detail-value">{patient.audiometry || 'N/A'}</span>
+            </div>
           </div>
         </div>
 
@@ -254,6 +341,16 @@ function PatientDetails({ patients }) {
             <h2>Remarks</h2>
             <div className="remarks-content">
               <p>{patient.remarks}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Advice Section */}
+        {patient.advice && (
+          <div className="details-section">
+            <h2>Advice</h2>
+            <div className="remarks-content">
+              <p>{patient.advice}</p>
             </div>
           </div>
         )}

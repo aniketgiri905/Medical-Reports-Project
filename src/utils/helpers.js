@@ -9,183 +9,358 @@ export const calculateBMI = (height, weight) => {
 }
 
 export const exportToPDF = (patientData) => {
-  const doc = new jsPDF()
-  const pageHeight = doc.internal.pageSize.height
+  // Initialize PDF document
+  const doc = new jsPDF('p', 'mm', 'a4')
   const pageWidth = doc.internal.pageSize.width
-  const margin = 10
-  let yPos = 12
-  const lineHeight = 4.5
+  const pageHeight = doc.internal.pageSize.height
+  const margin = 12
+  let yPos = margin
+  const lineHeight = 5.5
+  const sectionSpacing = 3
   const maxY = pageHeight - margin
-  const col1X = margin
-  const col2X = pageWidth / 2 + 5
 
-  // Page break only when necessary
+  // Helper: Check and add new page if needed
   const checkPageBreak = (requiredSpace = lineHeight) => {
-    if (yPos + requiredSpace >= maxY) {
+    if (yPos + requiredSpace > maxY) {
       doc.addPage()
       yPos = margin
+      // Reset colors for new page
+      doc.setTextColor(0, 0, 0)
+      doc.setDrawColor(0, 0, 0)
     }
   }
 
-  // Compact key:value on single line
-  const addKeyValue = (key, value, x = col1X, width = pageWidth / 2 - 15) => {
-    checkPageBreak(lineHeight)
+  // Helper: Add key-value pair on single line
+  const addKeyValue = (key, value, xPos = margin, maxWidth = null) => {
+    checkPageBreak(lineHeight + 1)
+    doc.setTextColor(0, 0, 0) // Black text
     doc.setFontSize(11)
-    const text = `${key}: ${value || 'N/A'}`
-    // Set font for label (bold) and value (normal)
-    const labelText = `${key}: `
-    const valueText = value || 'N/A'
+    
+    const label = `${key}: `
+    const textValue = String(value || 'N/A')
+    
+    // Label in bold
     doc.setFont(undefined, 'bold')
-    doc.text(labelText, x, yPos)
-    const labelWidth = doc.getTextWidth(labelText)
+    const actualLabelWidth = doc.getTextWidth(label)
+    // Minimum label width: 140px ≈ 37mmyy
+    const minLabelWidth = 37
+    const labelWidth = Math.max(actualLabelWidth, minLabelWidth)
+    
+    doc.text(label, xPos, yPos)
+    
+    // Value in normal weight - positioned after minimum label width
     doc.setFont(undefined, 'normal')
-    const valueLines = doc.splitTextToSize(valueText, width - labelWidth)
-    doc.text(valueLines, x + labelWidth, yPos)
-    yPos += valueLines.length * lineHeight
+    const valueX = xPos + labelWidth
+    const availableWidth = maxWidth ? maxWidth - labelWidth : pageWidth - valueX - margin
+    
+    // Handle text wrapping if value is too long
+    const valueLines = doc.splitTextToSize(textValue, availableWidth)
+    doc.text(valueLines, valueX, yPos)
+    
+    // Update yPos for next line - reduced spacing
+    yPos += valueLines.length * lineHeight + 0.3
   }
 
-  // Compact section header
-  const sectionHeader = (title) => {
-    checkPageBreak(lineHeight + 2)
-    doc.setFontSize(12).setFont(undefined, 'bold')
-    doc.text(title, margin, yPos)
-    yPos += lineHeight + 1
-    doc.setLineWidth(0.3)
-    doc.line(margin, yPos, pageWidth - margin, yPos)
-    yPos += 2
+  // Helper: Add two key-value pairs side by side
+  const addTwoKeyValues = (key1, value1, key2, value2) => {
+    const col1X = margin
+    const col2X = (pageWidth / 2) + 10
+    const colWidth = (pageWidth / 2) - 20
+    
+    checkPageBreak(lineHeight + 1)
+    const startY = yPos
+    
+    // Minimum label width: 140px ≈ 37mm
+    const minLabelWidth = 37
+    
+    // Draw first key-value
+    doc.setTextColor(0, 0, 0)
+    doc.setFontSize(11)
+    const label1 = `${key1}: `
+    const textValue1 = String(value1 || 'N/A')
+    doc.setFont(undefined, 'bold')
+    const actualLabelWidth1 = doc.getTextWidth(label1)
+    const labelWidth1 = Math.max(actualLabelWidth1, minLabelWidth)
+    doc.text(label1, col1X, yPos)
     doc.setFont(undefined, 'normal')
+    const valueX1 = col1X + labelWidth1
+    const availableWidth1 = colWidth - labelWidth1
+    const valueLines1 = doc.splitTextToSize(textValue1, availableWidth1)
+    doc.text(valueLines1, valueX1, yPos)
+    const height1 = valueLines1.length * lineHeight + 1
+    
+    // Draw second key-value at same y position
+    yPos = startY
+    const label2 = `${key2}: `
+    const textValue2 = String(value2 || 'N/A')
+    doc.setFont(undefined, 'bold')
+    const actualLabelWidth2 = doc.getTextWidth(label2)
+    const labelWidth2 = Math.max(actualLabelWidth2, minLabelWidth)
+    doc.text(label2, col2X, yPos)
+    doc.setFont(undefined, 'normal')
+    const valueX2 = col2X + labelWidth2
+    const availableWidth2 = colWidth - labelWidth2
+    const valueLines2 = doc.splitTextToSize(textValue2, availableWidth2)
+    doc.text(valueLines2, valueX2, yPos)
+    const height2 = valueLines2.length * lineHeight + 1
+    
+    // Advance yPos by maximum height - reduced spacing
+    yPos = startY + Math.max(height1, height2) - 0.3
   }
 
-  // Page Title - Compact
-  doc.setFontSize(15)
+  // Helper: Add section header
+  const addSectionHeader = (title) => {
+    checkPageBreak(sectionSpacing + lineHeight + 3)
+    // Consistent spacing before header
+    yPos += sectionSpacing
+    const headerStartY = yPos
+    doc.setTextColor(0, 0, 0)
+    doc.setFontSize(12)
+    doc.setFont(undefined, 'bold')
+    // Convert title to uppercase
+    doc.text(title.toUpperCase(), margin, yPos)
+    yPos += lineHeight + 0.3 // Gap between header and underline
+    
+    // Add underline
+    doc.setDrawColor(0, 0, 0)
+    doc.setLineWidth(0.5)
+    const underlineY = yPos - 1
+    doc.line(margin, underlineY, pageWidth - margin, underlineY)
+    
+    // Add more spacing after underline (gap between line and content below)
+    yPos = underlineY + sectionSpacing + 1.5
+  }
+
+  // ========== HEADER SECTION ==========
+  // Hospital Name in RED - CENTERED
+  doc.setFontSize(24)
   doc.setFont(undefined, 'bold')
-  doc.text('MEDICAL REPORTS 2025', pageWidth / 2, yPos, { align: 'center' })
-  doc.setLineWidth(0.3)
-  doc.line(margin, yPos + 2, pageWidth - margin, yPos + 2)
-  yPos += 6
+  doc.setTextColor(255, 0, 0) // Red color
+  doc.text(patientData.hospitalName || 'Hospital Name', pageWidth / 2, yPos, { align: 'center' })
+  yPos += lineHeight + 0.7
 
-  // Hospital & Company Info - Compact
-  doc.setFontSize(11)
+  // Hospital Address in BLACK - CENTERED (only first line)
+  doc.setTextColor(0, 0, 0)
   doc.setFont(undefined, 'normal')
-  doc.text(patientData.hospitalName || 'Hospital Name', margin, yPos)
-  yPos += 3.5
+  doc.setFontSize(10)
   if (patientData.hospitalAddress1) {
-    doc.text(patientData.hospitalAddress1, margin, yPos)
-    yPos += 3
+    doc.text(patientData.hospitalAddress1, pageWidth / 2, yPos, { align: 'center' })
+    yPos += lineHeight
   }
-  if (patientData.hospitalAddress2) {
-    doc.text(patientData.hospitalAddress2, margin, yPos)
-    yPos += 3
-  }
-  yPos += 2
-  
-  // Company Name - Left aligned on single line
+
+  // Company Name - LEFT ALIGNED with larger value in CAPITAL LETTERS
   if (patientData.companyName) {
-    checkPageBreak(lineHeight)
-    doc.setFontSize(10)
-    doc.setFont(undefined, 'normal')
-    doc.text('Company Name:', margin, yPos)
-    const labelWidth = doc.getTextWidth('Company Name:')
+    yPos += 1 // Reduced gap
     doc.setFontSize(11)
+    doc.setFont(undefined, 'normal')
+    doc.setTextColor(0, 0, 0)
+    const labelText = 'Company Name: '
+    doc.text(labelText, margin, yPos)
+    const labelWidth = doc.getTextWidth(labelText)
+    // Company name value in larger, bold font - UPPERCASE
+    doc.setFontSize(14)
     doc.setFont(undefined, 'bold')
-    const companyText = patientData.companyName
-    // Ensure it doesn't wrap - use the full width available
-    const maxWidth = pageWidth - margin - labelWidth - 5
-    const companyLines = doc.splitTextToSize(companyText, maxWidth)
-    doc.text(companyLines, margin + labelWidth + 2, yPos)
+    doc.text(patientData.companyName.toUpperCase(), margin + labelWidth, yPos)
     doc.setFont(undefined, 'normal')
-    yPos += companyLines.length * lineHeight
+    doc.setFontSize(11) // Reset font size
+    yPos += lineHeight + 0.3 // Reduced gap before next section
   }
 
-  // MEDICAL REPORT DETAILS - Two columns
-  sectionHeader('Medical Report Details')
-  addKeyValue('Test Date', patientData.medicalTestDate, col1X)
-  addKeyValue('Cert No', patientData.certNo, col2X)
-  addKeyValue('Name', patientData.patientName, col1X)
-  addKeyValue('Emp Code', patientData.empCode || patientData.empId, col2X)
-  addKeyValue('Age', patientData.age, col1X)
-  addKeyValue('Sex', patientData.sex || patientData.gender, col2X)
-  addKeyValue('Designation', patientData.designation, col1X)
-  addKeyValue('Department', patientData.departmentName || patientData.department, col2X)
+  yPos += sectionSpacing - 1.5 // Reduced gap between company name and patient information
+
+  // ========== PATIENT INFORMATION SECTION ==========
+  addSectionHeader('Patient Information')
   
-  // Reset to single column
-  yPos += 1
+  const col1X = margin
+  const col2X = (pageWidth / 2) + 10
+  const colWidth = (pageWidth / 2) - 20
 
-  // PATIENT INFORMATION - Two columns
-  sectionHeader('Patient Information')
-  addKeyValue('Name', patientData.patientName, col1X)
-  addKeyValue('Age', patientData.age, col2X)
-  addKeyValue('Gender', patientData.gender || patientData.sex, col1X)
-  addKeyValue('Emp ID', patientData.empId || patientData.empCode, col2X)
-  addKeyValue('Cert Number', patientData.certNo, col1X)
-  addKeyValue('Contractor', patientData.contractorName, col2X)
-  addKeyValue('Department', patientData.department || patientData.designation, col1X)
-  addKeyValue('Contact', patientData.contactNo, col2X)
-  yPos += 1
+  addTwoKeyValues('Name', patientData.patientName, 'Age', patientData.age)
+  addTwoKeyValues('Gender', patientData.gender || patientData.sex, 'Emp ID', patientData.empId || patientData.empCode)
+  addTwoKeyValues('Certificate Number', patientData.certNo, 'Contractor Name', patientData.contractorName)
+  addTwoKeyValues('Department', patientData.department || patientData.departmentName, 'Contact Number', patientData.contactNo)
 
-  // PHYSIOLOGICAL DATA - Two columns
-  sectionHeader('Physiological Data')
-  addKeyValue('Height (cm)', patientData.height, col1X)
-  addKeyValue('Weight (kg)', patientData.weight, col2X)
-  addKeyValue('Expected Wt', patientData.expectedWeight, col1X)
-  addKeyValue('BMI', patientData.bmi, col2X)
-  addKeyValue('Chest (cm)', patientData.chest, col1X)
-  addKeyValue('BP', `${patientData.bpSystolic || ''}/${patientData.bpDiastolic || ''}`, col2X)
-  addKeyValue('Pulse (/min)', patientData.pulse, col1X)
-  yPos += 1
+  // ========== PHYSIOLOGICAL DATA SECTION ==========
+  addSectionHeader('Physiological Data')
 
-  // MEDICAL HISTORY - Compact
-  const printList = (title, list) => {
-    const items = (list || []).filter(i => i && i.trim())
-    if (!items.length) return
+  addTwoKeyValues('Height (CM)', patientData.height, 'Weight (KG)', patientData.weight)
+  addTwoKeyValues('Expected Weight (KG)', patientData.expectedWeight, 'Chest (CM)', patientData.chest)
+  addTwoKeyValues('BMI', patientData.bmi, 'BPSystolic', patientData.bpSystolic || 'N/A')
+  addTwoKeyValues('BPDiastolic', patientData.bpDiastolic || 'N/A', 'Pulse (/MIN)', patientData.pulse)
 
-    sectionHeader(title)
-    doc.setFontSize(11)
-    const itemsText = items.join('; ')
-    const lines = doc.splitTextToSize(itemsText, pageWidth - 2 * margin)
-    checkPageBreak(lines.length * lineHeight)
-    doc.text(lines, margin, yPos)
-    yPos += lines.length * lineHeight + 1
+  // ========== MEDICAL HISTORY SECTION ==========
+  addSectionHeader('Medical History')
+
+  // Past Medical History
+  const pastConditions = []
+  if (patientData.pastHypertension === 'Yes') pastConditions.push('Hypertension')
+  if (patientData.pastDiabetes === 'Yes') pastConditions.push('Diabetes')
+  if (patientData.pastAsthma === 'Yes') pastConditions.push('Asthma')
+  if (patientData.pastChestPain === 'Yes') pastConditions.push('Chest Pain')
+  const pastHistoryItems = (patientData.pastHistory || []).filter(i => i && i.trim())
+  const pastHistoryList = [...pastConditions, ...pastHistoryItems]
+
+  // Present Medical History
+  const presentConditions = []
+  if (patientData.presentHypertension === 'Yes') presentConditions.push('Hypertension')
+  if (patientData.presentDiabetes === 'Yes') presentConditions.push('Diabetes')
+  if (patientData.presentAsthma === 'Yes') presentConditions.push('Asthma')
+  if (patientData.presentChestPain === 'Yes') presentConditions.push('Chest Pain')
+  const presentHistoryItems = (patientData.presentHistory || []).filter(i => i && i.trim())
+  const presentHistoryList = [...presentConditions, ...presentHistoryItems]
+
+  // Sub-headings
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(11)
+  doc.setFont(undefined, 'bold')
+  doc.text('Past Medical History', col1X, yPos)
+  doc.text('Present Medical History', col2X, yPos)
+  yPos += lineHeight + 1.5
+
+  // Content - Past History
+  doc.setFont(undefined, 'normal')
+  doc.setFontSize(10)
+  const pastStartY = yPos
+  let pastLines = []
+  if (pastHistoryList.length > 0) {
+    const pastText = pastHistoryList.join('; ')
+    pastLines = doc.splitTextToSize(pastText, colWidth)
+    doc.text(pastLines, col1X, yPos)
+  } else {
+    doc.setFont(undefined, 'italic')
+    doc.setTextColor(128, 128, 128)
+    doc.text('No past medical history recorded', col1X, yPos)
+    doc.setTextColor(0, 0, 0)
+    doc.setFont(undefined, 'normal')
+    pastLines = ['No past medical history recorded']
   }
 
-  printList('Past Medical History', patientData.pastHistory)
-  printList('Present Medical History', patientData.presentHistory)
-
-  // FAMILY HISTORY - Two columns
-  sectionHeader('Family History')
-  const fatherValue = patientData.fatherHistory?.has ? (patientData.fatherHistory.details || 'Yes') : 'No'
-  const motherValue = patientData.motherHistory?.has ? (patientData.motherHistory.details || 'Yes') : 'No'
-  addKeyValue('Father', fatherValue, col1X)
-  addKeyValue('Mother', motherValue, col2X)
-  yPos += 1
-
-  // ADDICTIONS - Two columns
-  sectionHeader('Addictions')
-  addKeyValue('Tobacco', patientData.tobacco ? 'Yes' : 'No', col1X)
-  addKeyValue('Smoking', patientData.smoking ? 'Yes' : 'No', col2X)
-  addKeyValue('Drinking', patientData.drinking ? 'Yes' : 'No', col1X)
-  addKeyValue('Allergic To', patientData.allergicTo || 'No', col2X)
-  yPos += 1
-
-  // TEST RESULTS - Compact paragraphs
-  const printParagraph = (title, text) => {
-    if (!text || !text.trim()) return
-
-    sectionHeader(title)
-    checkPageBreak(lineHeight)
-    doc.setFontSize(11)
-    const lines = doc.splitTextToSize(text, pageWidth - 2 * margin)
-    checkPageBreak(lines.length * lineHeight)
-    doc.text(lines, margin, yPos)
-    yPos += lines.length * lineHeight + 1
+  // Content - Present History
+  yPos = pastStartY
+  let presentLines = []
+  if (presentHistoryList.length > 0) {
+    const presentText = presentHistoryList.join('; ')
+    presentLines = doc.splitTextToSize(presentText, colWidth)
+    doc.text(presentLines, col2X, yPos)
+  } else {
+    doc.setFont(undefined, 'italic')
+    doc.setTextColor(128, 128, 128)
+    doc.text('No present medical history recorded', col2X, yPos)
+    doc.setTextColor(0, 0, 0)
+    doc.setFont(undefined, 'normal')
+    presentLines = ['No present medical history recorded']
   }
 
-  printParagraph('ECG', patientData.ecg)
-  printParagraph('X-Ray Chest', patientData.xray)
-  printParagraph('Pulmonary Function Test', patientData.pulmonaryFunctionTest)
-  printParagraph('Remarks', patientData.remarks)
+  // Move to bottom of tallest column
+  const maxLines = Math.max(pastLines.length, presentLines.length)
+  yPos = pastStartY + (maxLines * lineHeight) + 2
 
-  // SAVE PDF
+  // ========== FAMILY HISTORY SECTION ==========
+  addSectionHeader('Family History')
+
+  const fatherValue = patientData.fatherHistory?.has 
+    ? (patientData.fatherHistory.details || 'Yes') 
+    : 'NAD'
+  const motherValue = patientData.motherHistory?.has 
+    ? (patientData.motherHistory.details || 'Yes') 
+    : 'NAD'
+
+  addTwoKeyValues('Father', fatherValue, 'Mother', motherValue)
+
+  // ========== VISION EXAMINATION SECTION ==========
+  addSectionHeader('Vision Examination')
+
+  // Vision fields - single pair format (e.g., 6/6)
+  const visionDistanceRight = (patientData.visionDistanceRight1 && patientData.visionDistanceRight2)
+    ? `${patientData.visionDistanceRight1}/${patientData.visionDistanceRight2}`
+    : 'N/A'
+  const visionDistanceLeft = (patientData.visionDistanceLeft1 && patientData.visionDistanceLeft2)
+    ? `${patientData.visionDistanceLeft1}/${patientData.visionDistanceLeft2}`
+    : 'N/A'
+  const visionNearRight = (patientData.visionNearRight1 && patientData.visionNearRight2)
+    ? `${patientData.visionNearRight1}/${patientData.visionNearRight2}`
+    : 'N/A'
+  const visionNearLeft = (patientData.visionNearLeft1 && patientData.visionNearLeft2)
+    ? `${patientData.visionNearLeft1}/${patientData.visionNearLeft2}`
+    : 'N/A'
+
+  addTwoKeyValues('Vision Colour', patientData.visionColor || 'N/A', 'Glasses', patientData.glasses || 'N/A')
+  addTwoKeyValues('Vision Distance Right', visionDistanceRight, 'Vision Distance Left', visionDistanceLeft)
+  addTwoKeyValues('Vision Near Right', visionNearRight, 'Vision Near Left', visionNearLeft)
+
+  // ========== ADDICTIONS SECTION ==========
+  addSectionHeader('Addictions')
+
+  addTwoKeyValues('Tobacco', patientData.tobacco ? 'Yes' : 'No', 'Smoking', patientData.smoking ? 'Yes' : 'No')
+  addTwoKeyValues('Drinking', patientData.drinking ? 'Yes' : 'No', 'Allergic To', patientData.allergicTo || 'No')
+
+  // ========== SPECIALIZED TEST SECTION ==========
+  addSectionHeader('Specialized Test')
+  
+  // ECG, X-Ray Chest, and Pulmonary Function Test in single line with 33.33% width each
+  checkPageBreak(lineHeight + 1)
+  doc.setTextColor(0, 0, 0)
+  doc.setFontSize(10)
+  
+  const colWidthTest = (pageWidth - 2 * margin) / 3
+  const col1TestX = margin
+  const col2TestX = margin + colWidthTest
+  const col3TestX = margin + (colWidthTest * 2)
+  
+  // ECG
+  const ecgLabel = 'ECG: '
+  const ecgValue = String(patientData.ecg || 'N/A')
+  doc.setFont(undefined, 'bold')
+  doc.text(ecgLabel, col1TestX, yPos)
+  const ecgLabelWidth = doc.getTextWidth(ecgLabel)
+  doc.setFont(undefined, 'normal')
+  doc.text(ecgValue, col1TestX + ecgLabelWidth, yPos)
+  
+  // X-Ray Chest
+  const xrayLabel = 'X-Ray Chest: '
+  const xrayValue = String(patientData.xray || 'N/A')
+  doc.setFont(undefined, 'bold')
+  doc.text(xrayLabel, col2TestX, yPos)
+  const xrayLabelWidth = doc.getTextWidth(xrayLabel)
+  doc.setFont(undefined, 'normal')
+  doc.text(xrayValue, col2TestX + xrayLabelWidth, yPos)
+  
+  // Pulmonary Function Test
+  const pftLabel = 'PFT: '
+  const pftValue = String(patientData.pulmonaryFunctionTest || 'N/A')
+  doc.setFont(undefined, 'bold')
+  doc.text(pftLabel, col3TestX, yPos)
+  const pftLabelWidth = doc.getTextWidth(pftLabel)
+  doc.setFont(undefined, 'normal')
+  const pftAvailableWidth = colWidthTest - pftLabelWidth
+  const pftLines = doc.splitTextToSize(pftValue, pftAvailableWidth)
+  doc.text(pftLines, col3TestX + pftLabelWidth, yPos)
+  
+  yPos += Math.max(lineHeight, pftLines.length * lineHeight) + 0.3
+
+  // Audiometry - 50% width (below PFT)
+  checkPageBreak(lineHeight + 1)
+  const audiometryColWidth = (pageWidth - 2 * margin) / 2
+  const audiometryCol1X = margin
+  const audiometryLabel = 'Audiometry: '
+  const audiometryValue = String(patientData.audiometry || 'N/A')
+  doc.setFont(undefined, 'bold')
+  doc.text(audiometryLabel, audiometryCol1X, yPos)
+  const audiometryLabelWidth = doc.getTextWidth(audiometryLabel)
+  doc.setFont(undefined, 'normal')
+  const audiometryAvailableWidth = audiometryColWidth - audiometryLabelWidth
+  const audiometryLines = doc.splitTextToSize(audiometryValue, audiometryAvailableWidth)
+  doc.text(audiometryLines, audiometryCol1X + audiometryLabelWidth, yPos)
+  
+  yPos += Math.max(lineHeight, audiometryLines.length * lineHeight) + 0.3
+
+  // ========== REMARKS AND ADVICE ==========
+  // Simple key-value pairs without section headers
+  yPos += 1 // Reduced spacing
+  addKeyValue('Remark', patientData.remarks || 'N/A', col1X, colWidth)
+  addKeyValue('Advice', patientData.advice || 'N/A', col1X, colWidth)
+
+  // ========== SAVE PDF ==========
   const fileName = `Medical_Report_${patientData.patientName || 'Patient'}_${patientData.empId || patientData.empCode || Date.now()}.pdf`
   doc.save(fileName)
 }
@@ -220,17 +395,49 @@ export const exportToExcel = (data, fileName = 'medical_reports') => {
     'B.P. Diastolic (mmHg)': patient.bpDiastolic || '',
     'Pulse (/min)': patient.pulse || '',
     'Past History': patient.pastHistory?.join('; ') || '',
+    'Past Hypertension': patient.pastHypertension || 'No',
+    'Past Diabetes': patient.pastDiabetes || 'No',
+    'Past Asthma': patient.pastAsthma || 'No',
+    'Past Chest Pain': patient.pastChestPain || 'No',
     'Present History': patient.presentHistory?.join('; ') || '',
-    'Father History': patient.fatherHistory?.has ? patient.fatherHistory.details : 'No',
-    'Mother History': patient.motherHistory?.has ? patient.motherHistory.details : 'No',
+    'Present Hypertension': patient.presentHypertension || 'No',
+    'Present Diabetes': patient.presentDiabetes || 'No',
+    'Present Asthma': patient.presentAsthma || 'No',
+    'Present Chest Pain': patient.presentChestPain || 'No',
+    'Father History': patient.fatherHistory?.has ? patient.fatherHistory.details : 'NAD',
+    'Mother History': patient.motherHistory?.has ? patient.motherHistory.details : 'NAD',
+    'Vision Color': patient.visionColor || '',
+    'Vision Distance Right': (patient.visionDistanceRight1 && patient.visionDistanceRight2) 
+      ? `${patient.visionDistanceRight1}/${patient.visionDistanceRight2}` 
+      : '',
+    'Vision Distance Right 1': patient.visionDistanceRight1 || '',
+    'Vision Distance Right 2': patient.visionDistanceRight2 || '',
+    'Vision Distance Left': (patient.visionDistanceLeft1 && patient.visionDistanceLeft2) 
+      ? `${patient.visionDistanceLeft1}/${patient.visionDistanceLeft2}` 
+      : '',
+    'Vision Distance Left 1': patient.visionDistanceLeft1 || '',
+    'Vision Distance Left 2': patient.visionDistanceLeft2 || '',
+    'Vision Near Right': (patient.visionNearRight1 && patient.visionNearRight2) 
+      ? `${patient.visionNearRight1}/${patient.visionNearRight2}` 
+      : '',
+    'Vision Near Right 1': patient.visionNearRight1 || '',
+    'Vision Near Right 2': patient.visionNearRight2 || '',
+    'Vision Near Left': (patient.visionNearLeft1 && patient.visionNearLeft2) 
+      ? `${patient.visionNearLeft1}/${patient.visionNearLeft2}` 
+      : '',
+    'Vision Near Left 1': patient.visionNearLeft1 || '',
+    'Vision Near Left 2': patient.visionNearLeft2 || '',
+    'Glasses': patient.glasses || '',
     'Tobacco': patient.tobacco ? 'Yes' : 'No',
     'Smoking': patient.smoking ? 'Yes' : 'No',
     'Drinking': patient.drinking ? 'Yes' : 'No',
     'Allergic To': patient.allergicTo || '',
     'Remarks': patient.remarks || '',
+    'Advice': patient.advice || '',
     'ECG': patient.ecg || '',
     'X-Ray': patient.xray || '',
-    'Pulmonary Function Test': patient.pulmonaryFunctionTest || ''
+    'Pulmonary Function Test': patient.pulmonaryFunctionTest || '',
+    'Audiometry': patient.audiometry || ''
   }))
 
   const ws = XLSX.utils.json_to_sheet(excelData)

@@ -1,8 +1,80 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import * as XLSX from 'xlsx'
+import { toast } from 'react-hot-toast'
 import { calculateBMI, exportToExcel } from '../utils/helpers'
 import './PatientForm.css'
+
+// Reusable Input Component with Checkmark/Pencil Icon
+const EditableInput = ({ name, value, onChange, type = 'text', placeholder, required, className = '', ...props }) => {
+  const [isEdited, setIsEdited] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
+
+  const handleInputChange = (e) => {
+    onChange(e)
+    const inputValue = e.target.value
+    if (inputValue && inputValue.toString().trim() !== '') {
+      setIsEdited(true)
+      setIsSaved(false)
+    } else {
+      setIsEdited(false)
+      setIsSaved(false)
+    }
+  }
+
+  const handleSave = () => {
+    setIsSaved(true)
+    setIsEdited(false)
+  }
+
+  const handleEdit = () => {
+    setIsSaved(false)
+    setIsEdited(true)
+  }
+
+  const showCheckmark = isEdited && !isSaved && value && value.toString().trim() !== ''
+  const showPencil = isSaved && !isEdited
+
+  const InputComponent = type === 'textarea' ? 'textarea' : 'input'
+  const isDisabled = isSaved && !isEdited
+
+  return (
+    <div className={`input-with-icon ${type === 'textarea' ? 'textarea-with-icon' : ''}`}>
+      <InputComponent
+        type={type === 'textarea' ? undefined : type}
+        name={name}
+        value={value || ''}
+        onChange={handleInputChange}
+        placeholder={placeholder}
+        required={required}
+        className={className}
+        disabled={isDisabled}
+        readOnly={isDisabled}
+        {...props}
+      />
+      {showCheckmark && (
+        <button
+          type="button"
+          className="field-action-icon checkmark"
+          onClick={handleSave}
+          title="Save"
+        >
+          ✓
+        </button>
+      )}
+      {showPencil && (
+        <button
+          type="button"
+          className="field-action-icon pencil"
+          onClick={handleEdit}
+          title="Edit"
+        >
+          ✎
+        </button>
+      )}
+    </div>
+  )
+}
 
 function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange }) {
   const { id } = useParams()
@@ -10,6 +82,10 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   const isEdit = !!id
   
   const existingPatient = isEdit ? patients.find(p => p.id === id) : null
+  
+  // Mode selection: null = not selected, 'import' = excel import, 'manual' = manual entry
+  const [entryMode, setEntryMode] = useState(isEdit ? 'manual' : null)
+  const fileInputRef = useRef(null)
 
   const [formData, setFormData] = useState({
     hospitalName: settings?.hospitalName || 'Hospital Name',
@@ -39,16 +115,36 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
     medicalTestDate: new Date().toISOString().split('T')[0],
     pastHistory: [''],
     presentHistory: [''],
-    fatherHistory: { has: true, details: '' },
-    motherHistory: { has: true, details: '' },
+    pastHypertension: 'No',
+    pastDiabetes: 'No',
+    pastAsthma: 'No',
+    pastChestPain: 'No',
+    presentHypertension: 'No',
+    presentDiabetes: 'No',
+    presentAsthma: 'No',
+    presentChestPain: 'No',
+    fatherHistory: { has: false, details: '' },
+    motherHistory: { has: false, details: '' },
+    visionColor: 'Normal',
+    visionDistanceRight1: '6',
+    visionDistanceRight2: '6',
+    visionDistanceLeft1: '6',
+    visionDistanceLeft2: '6',
+    visionNearRight1: 'N',
+    visionNearRight2: '6',
+    visionNearLeft1: 'N',
+    visionNearLeft2: '6',
+    glasses: 'Without Glasses',
     tobacco: false,
     smoking: false,
     drinking: false,
     allergicTo: '',
     remarks: '',
-    ecg: '',
-    xray: '',
-    pulmonaryFunctionTest: ''
+    advice: '',
+    ecg: 'Normal',
+    xray: 'Normal',
+    pulmonaryFunctionTest: 'Normal',
+    audiometry: 'Normal'
   })
 
   useEffect(() => {
@@ -61,7 +157,27 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           : [''],
         presentHistory: existingPatient.presentHistory && existingPatient.presentHistory.length > 0 
           ? existingPatient.presentHistory 
-          : ['']
+          : [''],
+        // Set default values for medical conditions if not present (backward compatibility)
+        pastHypertension: existingPatient.pastHypertension || 'No',
+        pastDiabetes: existingPatient.pastDiabetes || 'No',
+        pastAsthma: existingPatient.pastAsthma || 'No',
+        pastChestPain: existingPatient.pastChestPain || 'No',
+        presentHypertension: existingPatient.presentHypertension || 'No',
+        presentDiabetes: existingPatient.presentDiabetes || 'No',
+        presentAsthma: existingPatient.presentAsthma || 'No',
+        presentChestPain: existingPatient.presentChestPain || 'No',
+        // Set default values for vision fields if not present
+        visionColor: existingPatient.visionColor || 'Normal',
+        visionDistanceRight1: existingPatient.visionDistanceRight1 || existingPatient.visionDistanceRight1a || '6',
+        visionDistanceRight2: existingPatient.visionDistanceRight2 || existingPatient.visionDistanceRight1b || '6',
+        visionDistanceLeft1: existingPatient.visionDistanceLeft1 || existingPatient.visionDistanceLeft1a || '6',
+        visionDistanceLeft2: existingPatient.visionDistanceLeft2 || existingPatient.visionDistanceLeft1b || '6',
+        visionNearRight1: existingPatient.visionNearRight1 || existingPatient.visionNearRight1a || 'N',
+        visionNearRight2: existingPatient.visionNearRight2 || existingPatient.visionNearRight1b || '6',
+        visionNearLeft1: existingPatient.visionNearLeft1 || existingPatient.visionNearLeft1a || 'N',
+        visionNearLeft2: existingPatient.visionNearLeft2 || existingPatient.visionNearLeft1b || '6',
+        glasses: existingPatient.glasses || 'Without Glasses'
       }
       setFormData(updatedData)
     }
@@ -70,9 +186,30 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   useEffect(() => {
     if (formData.height && formData.weight) {
       const bmi = calculateBMI(parseFloat(formData.height), parseFloat(formData.weight))
-      setFormData(prev => ({ ...prev, bmi: bmi.toFixed(2) }))
+      // Calculate Expected Weight = BMI × (Height in meters)²
+      const heightInMeters = parseFloat(formData.height) / 100
+      const expectedWeight = bmi * (heightInMeters * heightInMeters)
+      setFormData(prev => ({ ...prev, bmi: bmi.toFixed(2), expectedWeight: expectedWeight.toFixed(2) }))
+    } else if (formData.height && formData.bmi) {
+      // If BMI exists but weight doesn't, calculate Expected Weight from BMI
+      const heightInMeters = parseFloat(formData.height) / 100
+      const expectedWeight = parseFloat(formData.bmi) * (heightInMeters * heightInMeters)
+      setFormData(prev => ({ ...prev, expectedWeight: expectedWeight.toFixed(2) }))
     }
-  }, [formData.height, formData.weight])
+  }, [formData.height, formData.weight, formData.bmi])
+
+  // Automatically trigger file input when import mode is selected
+  useEffect(() => {
+    if (entryMode === 'import' && fileInputRef.current && !isEdit) {
+      // Small delay to ensure the input is rendered
+      const timer = setTimeout(() => {
+        if (fileInputRef.current) {
+          fileInputRef.current.click()
+        }
+      }, 100)
+      return () => clearTimeout(timer)
+    }
+  }, [entryMode, isEdit])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -129,7 +266,10 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
 
   const handleExcelImport = (e) => {
     const file = e.target.files[0]
-    if (!file) return
+    if (!file) {
+      // User cancelled the file dialog - stay in import mode
+      return
+    }
 
     const reader = new FileReader()
     reader.onload = (event) => {
@@ -140,7 +280,7 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
       const jsonData = XLSX.utils.sheet_to_json(worksheet)
 
       if (jsonData.length === 0) {
-        alert('No data found in the Excel file')
+        toast.error('No data found in the Excel file')
         return
       }
 
@@ -163,17 +303,25 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           departmentName: row['Department Name'] || row['Department'] || '',
           designation: row['Designation'] || '',
           contactNo: row['Contact Number'] || row['Contact No'] || row['Contact No.'] || '',
-          height: row['Height'] || '',
-          weight: row['Weight'] || '',
-          expectedWeight: row['Expected Weight'] || '',
-          chest: row['Chest'] || '',
-          bmi: row['BMI'] || (row['Height'] && row['Weight'] ? calculateBMI(parseFloat(row['Height']), parseFloat(row['Weight'])).toFixed(2) : ''),
-          bpSystolic: row['B.P(systolic)'] || row['BP Systolic'] || '',
-          bpDiastolic: row['B.P(diastolic)'] || row['BP Diastolic'] || '',
-          pulse: row['PULSE'] || row['Pulse'] || '',
+          height: row['Height (cm)'] || row['Height'] || '',
+          weight: row['Weight (kg)'] || row['Weight'] || '',
+          bmi: row['BMI'] || (row['Height (cm)'] && row['Weight (kg)'] ? calculateBMI(parseFloat(row['Height (cm)']), parseFloat(row['Weight (kg)'])).toFixed(2) : '') || (row['Height'] && row['Weight'] ? calculateBMI(parseFloat(row['Height']), parseFloat(row['Weight'])).toFixed(2) : ''),
+          expectedWeight: row['Expected Weight (kg)'] || row['Expected Weight'] || (row['Height (cm)'] && row['BMI'] ? (parseFloat(row['BMI']) * (parseFloat(row['Height (cm)']) / 100 * parseFloat(row['Height (cm)']) / 100)).toFixed(2) : '') || (row['Height'] && row['BMI'] ? (parseFloat(row['BMI']) * (parseFloat(row['Height']) / 100 * parseFloat(row['Height']) / 100)).toFixed(2) : '') || (row['Height (cm)'] && row['Weight (kg)'] ? (calculateBMI(parseFloat(row['Height (cm)']), parseFloat(row['Weight (kg)'])) * (parseFloat(row['Height (cm)']) / 100 * parseFloat(row['Height (cm)']) / 100)).toFixed(2) : '') || (row['Height'] && row['Weight'] ? (calculateBMI(parseFloat(row['Height']), parseFloat(row['Weight'])) * (parseFloat(row['Height']) / 100 * parseFloat(row['Height']) / 100)).toFixed(2) : ''),
+          chest: row['Chest (cm)'] || row['Chest'] || '',
+          bpSystolic: row['B.P. Systolic (mmHg)'] || row['B.P. Systolic'] || row['B.P(systolic)'] || row['BP Systolic'] || row['B.P Systolic'] || '',
+          bpDiastolic: row['B.P. Diastolic (mmHg)'] || row['B.P. Diastolic'] || row['B.P(diastolic)'] || row['BP Diastolic'] || row['B.P Diastolic'] || '',
+          pulse: row['Pulse (/min)'] || row['Pulse (/min'] || row['PULSE'] || row['Pulse'] || '',
           medicalTestDate: row['Medical Test Date'] || new Date().toISOString().split('T')[0],
           pastHistory: row['Past History'] ? (typeof row['Past History'] === 'string' ? row['Past History'].split(';').map(h => h.trim()).filter(h => h) : ['']) : [''],
           presentHistory: row['Present History'] ? (typeof row['Present History'] === 'string' ? row['Present History'].split(';').map(h => h.trim()).filter(h => h) : ['']) : [''],
+          pastHypertension: row['Past Hypertension'] || 'No',
+          pastDiabetes: row['Past Diabetes'] || 'No',
+          pastAsthma: row['Past Asthma'] || 'No',
+          pastChestPain: row['Past Chest Pain'] || 'No',
+          presentHypertension: row['Present Hypertension'] || 'No',
+          presentDiabetes: row['Present Diabetes'] || 'No',
+          presentAsthma: row['Present Asthma'] || 'No',
+          presentChestPain: row['Present Chest Pain'] || 'No',
           fatherHistory: { 
             has: row['Father History'] && row['Father History'] !== 'No' ? true : false, 
             details: row['Father History'] && row['Father History'] !== 'No' ? row['Father History'] : '' 
@@ -182,14 +330,26 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             has: row['Mother History'] && row['Mother History'] !== 'No' ? true : false, 
             details: row['Mother History'] && row['Mother History'] !== 'No' ? row['Mother History'] : '' 
           },
+          visionColor: row['Vision Color'] || row['Vision Colour'] || '',
+          visionDistanceRight1: row['Vision Distance Right 1'] || (row['Vision Distance Right'] ? row['Vision Distance Right'].toString().split('/')[0] : '') || '6',
+          visionDistanceRight2: row['Vision Distance Right 2'] || (row['Vision Distance Right'] ? row['Vision Distance Right'].toString().split('/')[1] : '') || '6',
+          visionDistanceLeft1: row['Vision Distance Left 1'] || (row['Vision Distance Left'] ? row['Vision Distance Left'].toString().split('/')[0] : '') || '6',
+          visionDistanceLeft2: row['Vision Distance Left 2'] || (row['Vision Distance Left'] ? row['Vision Distance Left'].toString().split('/')[1] : '') || '6',
+          visionNearRight1: row['Vision Near Right 1'] || (row['Vision Near Right'] ? row['Vision Near Right'].toString().split('/')[0] : '') || 'N',
+          visionNearRight2: row['Vision Near Right 2'] || (row['Vision Near Right'] ? row['Vision Near Right'].toString().split('/')[1] : '') || '6',
+          visionNearLeft1: row['Vision Near Left 1'] || (row['Vision Near Left'] ? row['Vision Near Left'].toString().split('/')[0] : '') || 'N',
+          visionNearLeft2: row['Vision Near Left 2'] || (row['Vision Near Left'] ? row['Vision Near Left'].toString().split('/')[1] : '') || '6',
+          glasses: row['Glasses'] || 'Without Glasses',
           tobacco: row['Tobacco'] === 'Yes' || row['Tobacco'] === true,
           smoking: row['Smoking'] === 'Yes' || row['Smoking'] === true,
           drinking: row['Drinking'] === 'Yes' || row['Drinking'] === true,
           allergicTo: row['ALLERGIC TO'] || row['Allergic To'] || '',
           remarks: row['Remarks'] || '',
-          ecg: row['ECG'] || '',
-          xray: row['X RAY CHEST'] || row['X-Ray'] || '',
-          pulmonaryFunctionTest: row['PULMONARY FUNCTION TEST'] || row['PFT'] || ''
+          advice: row['Advice'] || '',
+          ecg: row['ECG'] || 'Normal',
+          xray: row['X RAY CHEST'] || row['X-Ray'] || 'Normal',
+          pulmonaryFunctionTest: row['PULMONARY FUNCTION TEST'] || row['PFT'] || row['Pulmonary Function Test'] || 'Normal',
+          audiometry: row['Audiometry'] || row['AUDIOMETRY'] || 'Normal'
         }
       }
 
@@ -198,7 +358,8 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
         const row = jsonData[0]
         const patientData = convertRowToPatientData(row)
         setFormData(prev => ({ ...prev, ...patientData }))
-        alert('Patient data imported successfully!')
+        setEntryMode('manual') // Switch to manual mode to show the form
+        toast.success('Patient data imported successfully! You can now review and submit the form.')
       } else {
         // Multiple rows - import all as separate patients
         const confirmImport = window.confirm(
@@ -236,18 +397,18 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             if (onBulkSave) {
               // Use bulk save function if available
               onBulkSave(newPatients)
-              alert(`Successfully imported ${importedCount} patient record(s). ${skippedCount > 0 ? `${skippedCount} row(s) skipped (missing patient name).` : ''}`)
+              toast.success(`Successfully imported ${importedCount} patient record(s). ${skippedCount > 0 ? `${skippedCount} row(s) skipped (missing patient name).` : ''}`)
               navigate('/')
             } else {
               // Fallback: add them one by one with state updates
               newPatients.forEach((patient) => {
                 onSave(patient)
               })
-              alert(`Successfully imported ${importedCount} patient record(s). ${skippedCount > 0 ? `${skippedCount} row(s) skipped (missing patient name).` : ''}`)
+              toast.success(`Successfully imported ${importedCount} patient record(s). ${skippedCount > 0 ? `${skippedCount} row(s) skipped (missing patient name).` : ''}`)
               navigate('/')
             }
           } else {
-            alert('No valid patient records found to import.')
+            toast.error('No valid patient records found to import.')
           }
         }
       }
@@ -265,20 +426,78 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   }
 
 
+  // Show mode selection if not in edit mode and no mode selected
+  if (!isEdit && entryMode === null) {
+    return (
+      <div className="patient-form-container">
+        <div className="mode-selection-container">
+          <h1>Create New Medical Report</h1>
+          <p className="mode-selection-subtitle">Choose how you would like to add patient information</p>
+          <div className="mode-selection-cards">
+            <div 
+              className="mode-card"
+              onClick={() => setEntryMode('import')}
+            >
+              <div className="mode-icon">📊</div>
+              <h2>Import from Excel</h2>
+              <p>Upload an Excel file with patient data to automatically fill the form</p>
+            </div>
+            <div 
+              className="mode-card"
+              onClick={() => setEntryMode('manual')}
+            >
+              <div className="mode-icon">✍️</div>
+              <h2>Enter Details Manually</h2>
+              <p>Fill out the form step by step with patient information</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="patient-form-container">
       <form onSubmit={handleSubmit} className="patient-form">
-        <div className="form-actions-top print-hide">
-          <label className="file-upload-btn">
-            Import from Excel
-            <input 
-              type="file" 
-              accept=".xlsx,.xls" 
-              onChange={handleExcelImport}
-              style={{ display: 'none' }}
-            />
-          </label>
-        </div>
+        {entryMode === 'import' && (
+          <div className="import-section-container print-hide">
+            <div className="import-section-header">
+              <h2>Import from Excel</h2>
+              <button 
+                type="button"
+                className="back-to-selection-btn"
+                onClick={() => setEntryMode(null)}
+              >
+                ← Change Method
+              </button>
+            </div>
+            <div className="import-section-content">
+              <label className="file-upload-btn">
+                Choose Excel File
+                <input 
+                  ref={fileInputRef}
+                  type="file" 
+                  accept=".xlsx,.xls" 
+                  onChange={handleExcelImport}
+                  style={{ display: 'none' }}
+                />
+              </label>
+              <p className="import-help-text">Select an Excel file (.xlsx or .xls) containing patient data</p>
+            </div>
+          </div>
+        )}
+        
+        {entryMode === 'manual' && !isEdit && (
+          <div className="form-actions-top print-hide">
+            <button 
+              type="button"
+              className="back-to-selection-btn"
+              onClick={() => setEntryMode(null)}
+            >
+              ← Change Method
+            </button>
+          </div>
+        )}
 
         <div className="form-section print-hide">
           <h2>Hospital & Company Settings</h2>
@@ -302,19 +521,11 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Hospital Address Line 1</label>
+              <label>Hospital Address</label>
               <input 
                 type="text" 
                 value={formData.hospitalAddress1}
                 onChange={(e) => handleSettingsChange('hospitalAddress1', e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Hospital Address Line 2</label>
-              <input 
-                type="text" 
-                value={formData.hospitalAddress2}
-                onChange={(e) => handleSettingsChange('hospitalAddress2', e.target.value)}
               />
             </div>
           </div>
@@ -324,7 +535,7 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           <h2>Patient Information</h2>
           <div className="form-row">
             <div className="form-group">
-              <label>Name</label>
+              <label>Name <span className="required-asterisk">*</span></label>
               <input 
                 type="text" 
                 name="patientName" 
@@ -334,21 +545,24 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
               />
             </div>
             <div className="form-group">
-              <label>Age</label>
+              <label>Age <span className="required-asterisk">*</span></label>
               <input 
                 type="number" 
                 name="age" 
                 value={formData.age}
                 onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
-              <label>Gender</label>
+              <label>Gender <span className="required-asterisk">*</span></label>
               <select 
                 name="gender" 
                 value={formData.gender}
                 onChange={handleChange}
+                required
               >
+                <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -406,113 +620,30 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           </div>
         </div>
 
-        <div className="form-section">
-          <h2>MEDICAL REPORTS 2025</h2>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Medical Test Date</label>
-              <input 
-                type="date" 
-                name="medicalTestDate" 
-                value={formData.medicalTestDate}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Certificate No</label>
-              <input 
-                type="text" 
-                name="certNo" 
-                value={formData.certNo}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Name</label>
-              <input 
-                type="text" 
-                name="patientName" 
-                value={formData.patientName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Emp Code</label>
-              <input 
-                type="text" 
-                name="empCode" 
-                value={formData.empCode}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Age</label>
-              <input 
-                type="number" 
-                name="age" 
-                value={formData.age}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Sex</label>
-              <select 
-                name="sex" 
-                value={formData.sex}
-                onChange={handleChange}
-              >
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Designation</label>
-              <input 
-                type="text" 
-                name="designation" 
-                value={formData.designation}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="form-group">
-              <label>Department Name</label>
-              <input 
-                type="text" 
-                name="departmentName" 
-                value={formData.departmentName}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-        </div>
 
         <div className="form-section">
           <h2>Physiological Data</h2>
           <div className="form-row">
             <div className="form-group">
-              <label>Height (cm)</label>
+              <label>Height (cm) <span className="required-asterisk">*</span></label>
               <input 
                 type="number" 
                 name="height" 
                 value={formData.height}
                 onChange={handleChange}
                 step="0.1"
+                required
               />
             </div>
             <div className="form-group">
-              <label>Weight (kg)</label>
+              <label>Weight (kg) <span className="required-asterisk">*</span></label>
               <input 
                 type="number" 
                 name="weight" 
                 value={formData.weight}
                 onChange={handleChange}
                 step="0.1"
+                required
               />
             </div>
             <div className="form-group">
@@ -521,7 +652,9 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
                 type="number" 
                 name="expectedWeight" 
                 value={formData.expectedWeight}
-                onChange={handleChange}
+                readOnly
+                disabled
+                className="readonly"
                 step="0.1"
               />
             </div>
@@ -582,11 +715,63 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           <div className="history-container">
             <div className="history-column">
               <h3>Past Medical History</h3>
+              
+              {/* Medical Conditions - Yes/No dropdowns */}
+              <div className="medical-conditions-section">
+                <div className="conditions-grid">
+                  <div className="condition-item">
+                    <label>Hypertension</label>
+                    <select 
+                      name="pastHypertension"
+                      value={formData.pastHypertension}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Diabetes</label>
+                    <select 
+                      name="pastDiabetes"
+                      value={formData.pastDiabetes}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Asthma</label>
+                    <select 
+                      name="pastAsthma"
+                      value={formData.pastAsthma}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Chest Pain</label>
+                    <select 
+                      name="pastChestPain"
+                      value={formData.pastChestPain}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               <div className="history-items-list">
                 {formData.pastHistory.map((item, index) => (
                   <div key={index} className="history-item">
-                    <input 
+                    <EditableInput 
                       type="text" 
+                      name={`pastHistory_${index}`}
                       value={item}
                       onChange={(e) => updateHistoryItem('pastHistory', index, e.target.value)}
                       placeholder="Enter past medical history"
@@ -614,11 +799,63 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             </div>
             <div className="history-column">
               <h3>Present Medical History</h3>
+              
+              {/* Medical Conditions - Yes/No dropdowns */}
+              <div className="medical-conditions-section">
+                <div className="conditions-grid">
+                  <div className="condition-item">
+                    <label>Hypertension</label>
+                    <select 
+                      name="presentHypertension"
+                      value={formData.presentHypertension}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Diabetes</label>
+                    <select 
+                      name="presentDiabetes"
+                      value={formData.presentDiabetes}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Asthma</label>
+                    <select 
+                      name="presentAsthma"
+                      value={formData.presentAsthma}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                  <div className="condition-item">
+                    <label>Chest Pain</label>
+                    <select 
+                      name="presentChestPain"
+                      value={formData.presentChestPain}
+                      onChange={handleChange}
+                    >
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               <div className="history-items-list">
                 {formData.presentHistory.map((item, index) => (
                   <div key={index} className="history-item">
-                    <input 
+                    <EditableInput 
                       type="text" 
+                      name={`presentHistory_${index}`}
                       value={item}
                       onChange={(e) => updateHistoryItem('presentHistory', index, e.target.value)}
                       placeholder="Enter present medical history"
@@ -658,13 +895,14 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
                 className="family-history-select"
               >
                 <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="no">NAD</option>
               </select>
               {formData.fatherHistory.has && (
                 <div className="family-history-details">
                   <label className="family-details-label">Details</label>
-                  <input
+                  <EditableInput
                     type="text"
+                    name="fatherHistoryDetails"
                     value={formData.fatherHistory.details}
                     onChange={(e) => handleFamilyHistoryChange('fatherHistory', 'details', e.target.value)}
                     placeholder="Enter father's medical history details"
@@ -681,20 +919,136 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
                 className="family-history-select"
               >
                 <option value="yes">Yes</option>
-                <option value="no">No</option>
+                <option value="no">NAD</option>
               </select>
               {formData.motherHistory.has && (
-                <div className="family-history-details">
-                  <label className="family-details-label">Details</label>
-                  <input
-                    type="text"
-                    value={formData.motherHistory.details}
-                    onChange={(e) => handleFamilyHistoryChange('motherHistory', 'details', e.target.value)}
-                    placeholder="Enter mother's medical history details"
-                    className="family-history-input"
-                  />
+                  <div className="family-history-details">
+                    <label className="family-details-label">Details</label>
+                    <EditableInput
+                      type="text"
+                      name="motherHistoryDetails"
+                      value={formData.motherHistory.details}
+                      onChange={(e) => handleFamilyHistoryChange('motherHistory', 'details', e.target.value)}
+                      placeholder="Enter mother's medical history details"
+                      className="family-history-input"
+                    />
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h2>Vision Examination</h2>
+          <div className="vision-examination-container">
+            <div className="form-group">
+              <label>Vision Colour</label>
+              <input
+                type="text"
+                name="visionColor"
+                value={formData.visionColor}
+                onChange={handleChange}
+                placeholder="Enter vision color (e.g., Normal)"
+              />
+            </div>
+            <div className="form-group">
+              <label>Glasses</label>
+              <select
+                name="glasses"
+                value={formData.glasses}
+                onChange={handleChange}
+              >
+                <option value="With Glasses">With Glasses</option>
+                <option value="Without Glasses">Without Glasses</option>
+              </select>
+            </div>
+            <div className="vision-group">
+              <label>Vision Distance Right</label>
+              <div className="vision-two-fields">
+                <input
+                  type="text"
+                  name="visionDistanceRight1"
+                  value={formData.visionDistanceRight1}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+                <span className="vision-separator">/</span>
+                <input
+                  type="text"
+                  name="visionDistanceRight2"
+                  value={formData.visionDistanceRight2}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+              </div>
+            </div>
+            <div className="vision-group">
+              <label>Vision Distance Left</label>
+              <div className="vision-two-fields">
+                <input
+                  type="text"
+                  name="visionDistanceLeft1"
+                  value={formData.visionDistanceLeft1}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+                <span className="vision-separator">/</span>
+                <input
+                  type="text"
+                  name="visionDistanceLeft2"
+                  value={formData.visionDistanceLeft2}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+              </div>
+            </div>
+            <div className="vision-group">
+              <label>Vision Near Right</label>
+              <div className="vision-two-fields">
+                <input
+                  type="text"
+                  name="visionNearRight1"
+                  value={formData.visionNearRight1}
+                  onChange={handleChange}
+                  placeholder="N"
+                  className="vision-small-field"
+                />
+                <span className="vision-separator">/</span>
+                <input
+                  type="text"
+                  name="visionNearRight2"
+                  value={formData.visionNearRight2}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+              </div>
+            </div>
+            <div className="vision-group">
+              <label>Vision Near Left</label>
+              <div className="vision-two-fields">
+                <input
+                  type="text"
+                  name="visionNearLeft1"
+                  value={formData.visionNearLeft1}
+                  onChange={handleChange}
+                  placeholder="N"
+                  className="vision-small-field"
+                />
+                <span className="vision-separator">/</span>
+                <input
+                  type="text"
+                  name="visionNearLeft2"
+                  value={formData.visionNearLeft2}
+                  onChange={handleChange}
+                  placeholder="6"
+                  className="vision-small-field"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -739,7 +1093,7 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             </div>
             <div className="form-group allergies-input-group">
               <label className="allergies-label">Allergic To</label>
-              <input 
+              <EditableInput 
                 type="text" 
                 name="allergicTo" 
                 value={formData.allergicTo}
@@ -753,7 +1107,7 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
 
         <div className="form-section">
           <h2>Electrocardiogram (E.C.G)</h2>
-          <div className="form-group">
+          <div className="form-group test-feilds">
             <textarea 
               name="ecg" 
               value={formData.ecg}
@@ -766,8 +1120,9 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
 
         <div className="form-section">
           <h2>X-Ray Chest</h2>
-          <div className="form-group">
-            <textarea 
+          <div className="form-group test-feilds">
+            <EditableInput 
+              type="textarea"
               name="xray" 
               value={formData.xray}
               onChange={handleChange}
@@ -779,8 +1134,9 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
 
         <div className="form-section">
           <h2>Pulmonary Function Test</h2>
-          <div className="form-group">
-            <textarea 
+          <div className="form-group test-feilds">
+            <EditableInput 
+              type="textarea"
               name="pulmonaryFunctionTest" 
               value={formData.pulmonaryFunctionTest}
               onChange={handleChange}
@@ -791,13 +1147,42 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
         </div>
 
         <div className="form-section">
+          <h2>Audiometry</h2>
+          <div className="form-group test-feilds">
+            <EditableInput 
+              type="textarea"
+              name="audiometry" 
+              value={formData.audiometry}
+              onChange={handleChange}
+              placeholder="Enter Audiometry results"
+              rows="3"
+            />
+          </div>
+        </div>
+
+        <div className="form-section">
           <h2>Remarks</h2>
-          <div className="form-group">
-            <textarea 
+          <div className="form-group remarks-feilds">
+            <EditableInput 
+              type="textarea"
               name="remarks" 
               value={formData.remarks}
               onChange={handleChange}
               placeholder="Enter any additional remarks or notes"
+              rows="4"
+            />
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h2>Advice</h2>
+          <div className="form-group remarks-feilds">
+            <EditableInput 
+              type="textarea"
+              name="advice" 
+              value={formData.advice}
+              onChange={handleChange}
+              placeholder="Enter medical advice"
               rows="4"
             />
           </div>

@@ -1,7 +1,8 @@
 .report-header {
-  background: white;
+  background: linear-gradient(135deg, #00838f 0%, #006064 100%);
   padding: 1.5rem 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.2);
+  border-bottom: 4px solid var(--medical-primary-light);
 }
 
 .header-content {
@@ -10,6 +11,7 @@
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
 }
 
 .hospital-info,
@@ -47,23 +49,77 @@
   border-radius: 4px;
 }
 
-.hospital-info h2,
+.hospital-info h2 {
+  margin: 0;
+  font-size: 34px;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .company-info h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #2c3e50;
+  color: #ffffff;
 }
 
 .company-info .company-name {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #e0f7fa;
+}
+
+.company-info .company-name .company-name-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.company-info .company-name .company-name-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: #e0f7fa;
 }
 
 .hospital-info p {
   margin: 0.25rem 0;
-  color: #666;
+  color: #e0f7fa;
   font-size: 0.9rem;
+  opacity: 0.95;
+}
+
+.home-button {
+  position: absolute;
+  top: -15px;
+  right: -45px;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 131, 143, 0.3);
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.home-button:hover {
+  background: linear-gradient(135deg, var(--medical-primary-dark) 0%, var(--medical-primary) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.4);
+}
+
+.home-button:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
@@ -80,6 +136,67 @@
   .company-info {
     width: 100%;
     justify-content: center;
+  }
+
+  .home-button {
+    position: static;
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Print Styles for Header */
+@media print {
+  .report-header {
+    padding: 0.5rem 0 !important;
+    box-shadow: none !important;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .header-content {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.3rem !important;
+  }
+
+  .hospital-info,
+  .company-info {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .hospital-info h2 {
+    font-size: 1.2rem !important;
+    color: #000 !important;
+  }
+
+  .hospital-info p {
+    font-size: 0.85rem !important;
+    color: #000 !important;
+    margin: 0.15rem 0 !important;
+  }
+
+  .company-info .company-name {
+    font-size: 1rem !important;
+    color: #000 !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    text-align: left !important;
+  }
+  
+  .company-info .company-name .company-name-value {
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+  }
+  
+  .company-info .company-name .company-name-label {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+  }
+
+  .home-button {
+    display: none !important;
   }
 }
 

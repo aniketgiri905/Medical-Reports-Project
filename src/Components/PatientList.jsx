@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 import { exportToExcel } from '../utils/helpers'
 import './PatientList.css'
 
@@ -14,18 +15,28 @@ function PatientList({ patients, onDelete }) {
     patient.contactNo?.includes(searchTerm)
   )
 
+  // Sort patients by Test Date (latest first) - descending order
+  const sortedPatients = [...filteredPatients].sort((a, b) => {
+    const dateA = a.medicalTestDate ? new Date(a.medicalTestDate) : new Date(0)
+    const dateB = b.medicalTestDate ? new Date(b.medicalTestDate) : new Date(0)
+    // Sort in descending order (latest first)
+    return dateB - dateA
+  })
+
   const handleExportAll = () => {
     if (patients.length === 0) {
-      alert('No patients to export')
+      toast.error('No patients to export')
       return
     }
     exportToExcel(patients, 'all_patients')
+    toast.success('Patients exported successfully!')
   }
 
   const handleDelete = (id, name) => {
     if (window.confirm(`Are you sure you want to delete the report for ${name}?`)) {
       onDelete(id)
       setOpenMenuId(null)
+      toast.success(`Patient report for ${name} deleted successfully`)
     }
   }
 
@@ -57,10 +68,12 @@ function PatientList({ patients, onDelete }) {
       <div className="list-header">
         <div className="header-title-section">
           <h1>Medical Reports Management</h1>
-          <Link to="/new" className="create-new-btn">
-            <span className="btn-icon">+</span>
-            Create New Report
-          </Link>
+          {patients.length > 0 && (
+            <Link to="/new" className="create-new-btn">
+              <span className="btn-icon">+</span>
+              Create New Report
+            </Link>
+          )}
         </div>
         <div className="header-actions">
           <input
@@ -70,6 +83,9 @@ function PatientList({ patients, onDelete }) {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
+          <Link to="/audiometry" className="audiometry-btn">
+            Audiometry Report
+          </Link>
           {patients.length > 0 && (
             <button onClick={handleExportAll} className="export-btn">
               Export All to Excel
@@ -99,6 +115,7 @@ function PatientList({ patients, onDelete }) {
           <table className="patients-table">
             <thead>
               <tr>
+                <th className="sr-no-column">Sr.No.</th>
                 <th>Name</th>
                 <th>Age</th>
                 <th>Gender</th>
@@ -108,8 +125,9 @@ function PatientList({ patients, onDelete }) {
               </tr>
             </thead>
             <tbody>
-              {filteredPatients.map(patient => (
+              {sortedPatients.map((patient, index) => (
                 <tr key={patient.id}>
+                  <td className="sr-no-cell">{index + 1}</td>
                   <td>
                     <Link to={`/patient/${patient.id}`} className="patient-name-link">
                       {patient.patientName || 'Unnamed Patient'}

@@ -1,8 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { Toaster } from 'react-hot-toast'
 import PatientForm from './Components/PatientForm'
 import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
+import AudiometryReport from './Components/AudiometryReport'
 import Header from './Components/Header'
 import './App.css'
 
@@ -59,6 +61,30 @@ function App() {
 
   return (
     <div className="app">
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#4a90e2',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#e74c3c',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <Header 
         hospitalName={settings.hospitalName}
         hospitalAddress1={settings.hospitalAddress1}
@@ -104,6 +130,12 @@ function App() {
               <PatientDetails 
                 patients={patients}
               />
+            } 
+          />
+          <Route 
+            path="/audiometry" 
+            element={
+              <AudiometryReport />
             } 
           />
         </Routes>
