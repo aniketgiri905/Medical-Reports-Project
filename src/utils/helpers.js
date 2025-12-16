@@ -8,9 +8,11 @@ export const calculateBMI = (height, weight) => {
   return weight / (heightInMeters * heightInMeters)
 }
 
-export const exportToPDF = (patientData) => {
-  // Initialize PDF document
-  const doc = new jsPDF('p', 'mm', 'a4')
+// Core function to generate PDF content for a patient
+// Can work with an existing doc instance (for multi-patient export) or create a new one
+const generatePatientPDFContent = (patientData, existingDoc = null, startNewPage = false) => {
+  // Use existing doc or create new one
+  const doc = existingDoc || new jsPDF('p', 'mm', 'a4')
   const pageWidth = doc.internal.pageSize.width
   const pageHeight = doc.internal.pageSize.height
   const margin = 12
@@ -18,6 +20,14 @@ export const exportToPDF = (patientData) => {
   const lineHeight = 5.5
   const sectionSpacing = 3
   const maxY = pageHeight - margin
+
+  // If using existing doc and starting new page, add page and reset position
+  if (existingDoc && startNewPage) {
+    doc.addPage()
+    yPos = margin
+    doc.setTextColor(0, 0, 0)
+    doc.setDrawColor(0, 0, 0)
+  }
 
   // Helper: Check and add new page if needed
   const checkPageBreak = (requiredSpace = lineHeight) => {
@@ -360,8 +370,39 @@ export const exportToPDF = (patientData) => {
   addKeyValue('Remark', patientData.remarks || 'N/A', col1X, colWidth)
   addKeyValue('Advice', patientData.advice || 'N/A', col1X, colWidth)
 
-  // ========== SAVE PDF ==========
+  // Return the doc instance and current yPos
+  return { doc, yPos }
+}
+
+export const exportToPDF = (patientData) => {
+  const { doc } = generatePatientPDFContent(patientData)
+  // Save PDF for single patient export
   const fileName = `Medical_Report_${patientData.patientName || 'Patient'}_${patientData.empId || patientData.empCode || Date.now()}.pdf`
+  doc.save(fileName)
+}
+
+export const exportAllToPDF = (patientsArray) => {
+  if (!patientsArray || patientsArray.length === 0) {
+    throw new Error('No patients to export')
+  }
+
+  // Initialize PDF document
+  let doc = null
+  let isFirstPatient = true
+
+  // Generate PDF content for each patient
+  patientsArray.forEach((patient, index) => {
+    const { doc: updatedDoc } = generatePatientPDFContent(
+      patient, 
+      doc, 
+      !isFirstPatient // Start new page for all patients except the first one
+    )
+    doc = updatedDoc
+    isFirstPatient = false
+  })
+
+  // Save the combined PDF
+  const fileName = `All_Medical_Reports_${new Date().toISOString().split('T')[0]}.pdf`
   doc.save(fileName)
 }
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import { exportToExcel } from '../utils/helpers'
+import { exportToExcel, exportAllToPDF } from '../utils/helpers'
 import './PatientList.css'
 
 function PatientList({ patients, onDelete }) {
@@ -30,6 +30,19 @@ function PatientList({ patients, onDelete }) {
     }
     exportToExcel(patients, 'all_patients')
     toast.success('Patients exported successfully!')
+  }
+
+  const handleExportAllPDF = () => {
+    if (patients.length === 0) {
+      toast.error('No patients to export')
+      return
+    }
+    try {
+      exportAllToPDF(patients)
+      toast.success(`All ${patients.length} patient reports exported to PDF successfully!`)
+    } catch (error) {
+      toast.error('Error exporting PDFs: ' + error.message)
+    }
   }
 
   const handleDelete = (id, name) => {
@@ -87,9 +100,14 @@ function PatientList({ patients, onDelete }) {
             Audiometry Report
           </Link>
           {patients.length > 0 && (
-            <button onClick={handleExportAll} className="export-btn">
-              Export All to Excel
-            </button>
+            <>
+              <button onClick={handleExportAllPDF} className="export-btn pdf-export-btn">
+                Export All to PDF
+              </button>
+              <button onClick={handleExportAll} className="export-btn">
+                Export All to Excel
+              </button>
+            </>
           )}
         </div>
       </div>

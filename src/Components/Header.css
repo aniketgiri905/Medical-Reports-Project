@@ -96,8 +96,9 @@
   top: -15px;
   right: -45px;
   padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
-  color: white;
+  background: blue;
+  color: #fff;
+  font-weight: 800;
   text-decoration: none;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -113,7 +114,7 @@
 }
 
 .home-button:hover {
-  background: linear-gradient(135deg, var(--medical-primary-dark) 0%, var(--medical-primary) 100%);
+  background: #7979fb;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 131, 143, 0.4);
 }
