@@ -748,6 +748,17 @@ function AudiometryReport() {
   const leftEarStatus = getEarStatus(leftEarData)
 
   const handleExportPDF = async () => {
+    if (!isAuthenticated) {
+      toast.error('Authentication required to export PDF files. Redirecting to login...', {
+        icon: '🔒',
+        duration: 3000,
+      })
+      setTimeout(() => {
+        navigate('/login', { state: { from: { pathname: location.pathname } } })
+      }, 500)
+      return
+    }
+    
     if (!reportData.name || !reportData.medicalTestDate || !reportData.age || !reportData.sex || !reportData.certNo) {
       toast.error('Please fill all required fields (Medical Test Date, Name, Age, Sex, Certificate Number)')
       return

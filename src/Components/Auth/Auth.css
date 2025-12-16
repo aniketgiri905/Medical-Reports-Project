@@ -176,5 +176,14 @@
       font-size: 1.4rem;
       padding-right: 3.5rem;
     }
+
+    .login-card .home-button {
+      position: absolute !important;
+      top: -130px;
+      right: 0rem;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      gap: 0.3rem;
+    }
   }
   
