@@ -292,6 +292,22 @@ const generatePatientPDFContent = (patientData, existingDoc = null, startNewPage
 
   addTwoKeyValues('Father', fatherValue, 'Mother', motherValue)
 
+  // Systemic Examination within Medical History section
+  checkPageBreak(lineHeight + 3)
+  yPos += 2 // Add spacing before systemic examination
+  doc.setFont(undefined, 'bold')
+  doc.setFontSize(11)
+  doc.text('Systemic Examination', col1X, yPos)
+  yPos += lineHeight + 1
+
+  const cvsValue = patientData.systemicExaminationCVS || 'NAD'
+  const rsValue = patientData.systemicExaminationRS || 'NAD'
+  const cnsValue = patientData.systemicExaminationCNS || 'NAD'
+  const paValue = patientData.systemicExaminationPA || 'NAD'
+
+  addTwoKeyValues('CVS', cvsValue, 'RS', rsValue)
+  addTwoKeyValues('CNS', cnsValue, 'PA', paValue)
+
   // ========== VISION EXAMINATION SECTION ==========
   addSectionHeader('Vision Examination')
 
@@ -462,6 +478,10 @@ export const exportToExcel = (data, fileName = 'medical_reports') => {
     'Present Chest Pain': patient.presentChestPain || 'No',
     'Father History': patient.fatherHistory?.has ? patient.fatherHistory.details : 'NAD',
     'Mother History': patient.motherHistory?.has ? patient.motherHistory.details : 'NAD',
+    'Systemic Examination CVS': patient.systemicExaminationCVS || 'NAD',
+    'Systemic Examination RS': patient.systemicExaminationRS || 'NAD',
+    'Systemic Examination CNS': patient.systemicExaminationCNS || 'NAD',
+    'Systemic Examination PA': patient.systemicExaminationPA || 'NAD',
     'Vision Color': patient.visionColor || '',
     'Vision Distance Right': (patient.visionDistanceRight1 && patient.visionDistanceRight2) 
       ? `${patient.visionDistanceRight1}/${patient.visionDistanceRight2}` 

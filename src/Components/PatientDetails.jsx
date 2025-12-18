@@ -267,6 +267,29 @@ function PatientDetails({ patients }) {
               </div>
             </div>
           </div>
+          
+          {/* Systemic Examination within Medical History */}
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #ddd' }}>
+            <h3 style={{ marginBottom: '15px', fontSize: '1.1em', fontWeight: '600' }}>Systemic Examination</h3>
+            <div className="details-grid">
+              <div className="detail-item">
+                <span className="detail-label">CVS:</span>
+                <span className="detail-value">{patient.systemicExaminationCVS || 'NAD'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">RS:</span>
+                <span className="detail-value">{patient.systemicExaminationRS || 'NAD'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">CNS:</span>
+                <span className="detail-value">{patient.systemicExaminationCNS || 'NAD'}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">PA:</span>
+                <span className="detail-value">{patient.systemicExaminationPA || 'NAD'}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Vision Examination Section */}

@@ -726,6 +726,51 @@
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
 }
 
+.systemic-examination-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.systemic-examination-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background-color: #fafafa;
+  transition: all 0.2s;
+}
+
+.systemic-examination-item:hover {
+  border-color: #4a90e2;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.systemic-examination-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.systemic-examination-input {
+  padding: 0.5em 0.7em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.95em;
+  transition: border-color 0.2s;
+}
+
+.systemic-examination-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
 /* Vision Examination Section Styles */
 .vision-examination-container {
   display: grid;

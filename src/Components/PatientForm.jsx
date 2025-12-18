@@ -128,6 +128,10 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
     presentChestPain: 'No',
     fatherHistory: { has: false, details: '' },
     motherHistory: { has: false, details: '' },
+    systemicExaminationCVS: 'NAD',
+    systemicExaminationRS: 'NAD',
+    systemicExaminationCNS: 'NAD',
+    systemicExaminationPA: 'NAD',
     visionColor: 'Normal',
     visionDistanceRight1: '6',
     visionDistanceRight2: '6',
@@ -180,7 +184,12 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
         visionNearRight2: existingPatient.visionNearRight2 || existingPatient.visionNearRight1b || '6',
         visionNearLeft1: existingPatient.visionNearLeft1 || existingPatient.visionNearLeft1a || 'N',
         visionNearLeft2: existingPatient.visionNearLeft2 || existingPatient.visionNearLeft1b || '6',
-        glasses: existingPatient.glasses || 'Without Glasses'
+        glasses: existingPatient.glasses || 'Without Glasses',
+        // Set default values for systemic examination fields if not present (backward compatibility)
+        systemicExaminationCVS: existingPatient.systemicExaminationCVS || 'NAD',
+        systemicExaminationRS: existingPatient.systemicExaminationRS || 'NAD',
+        systemicExaminationCNS: existingPatient.systemicExaminationCNS || 'NAD',
+        systemicExaminationPA: existingPatient.systemicExaminationPA || 'NAD'
       }
       setFormData(updatedData)
     }
@@ -344,6 +353,10 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             has: row['Mother History'] && row['Mother History'] !== 'No' ? true : false, 
             details: row['Mother History'] && row['Mother History'] !== 'No' ? row['Mother History'] : '' 
           },
+          systemicExaminationCVS: row['Systemic Examination CVS'] || row['CVS'] || 'NAD',
+          systemicExaminationRS: row['Systemic Examination RS'] || row['RS'] || 'NAD',
+          systemicExaminationCNS: row['Systemic Examination CNS'] || row['CNS'] || 'NAD',
+          systemicExaminationPA: row['Systemic Examination PA'] || row['PA'] || 'NAD',
           visionColor: row['Vision Color'] || row['Vision Colour'] || '',
           visionDistanceRight1: row['Vision Distance Right 1'] || (row['Vision Distance Right'] ? row['Vision Distance Right'].toString().split('/')[0] : '') || '6',
           visionDistanceRight2: row['Vision Distance Right 2'] || (row['Vision Distance Right'] ? row['Vision Distance Right'].toString().split('/')[1] : '') || '6',
@@ -964,6 +977,57 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
                       />
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Systemic Examination within Medical History */}
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #ddd' }}>
+            <h3 style={{ marginBottom: '15px', fontSize: '1.1em', fontWeight: '600', color: '#2c3e50' }}>Systemic Examination</h3>
+            <div className="systemic-examination-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '15px' }}>
+              <div className="systemic-examination-item">
+                <label className="systemic-examination-label">CVS</label>
+                <EditableInput
+                  type="text"
+                  name="systemicExaminationCVS"
+                  value={formData.systemicExaminationCVS}
+                  onChange={handleChange}
+                  placeholder="NAD"
+                  className="systemic-examination-input"
+                />
+              </div>
+              <div className="systemic-examination-item">
+                <label className="systemic-examination-label">RS</label>
+                <EditableInput
+                  type="text"
+                  name="systemicExaminationRS"
+                  value={formData.systemicExaminationRS}
+                  onChange={handleChange}
+                  placeholder="NAD"
+                  className="systemic-examination-input"
+                />
+              </div>
+              <div className="systemic-examination-item">
+                <label className="systemic-examination-label">CNS</label>
+                <EditableInput
+                  type="text"
+                  name="systemicExaminationCNS"
+                  value={formData.systemicExaminationCNS}
+                  onChange={handleChange}
+                  placeholder="NAD"
+                  className="systemic-examination-input"
+                />
+              </div>
+              <div className="systemic-examination-item">
+                <label className="systemic-examination-label">PA</label>
+                <EditableInput
+                  type="text"
+                  name="systemicExaminationPA"
+                  value={formData.systemicExaminationPA}
+                  onChange={handleChange}
+                  placeholder="NAD"
+                  className="systemic-examination-input"
+                />
               </div>
             </div>
           </div>
