@@ -1,11 +1,12 @@
 .patient-details-container {
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 131, 143, 0.1);
+  box-shadow: 0 4px 16px var(--medical-shadow);
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .details-header {
@@ -14,7 +15,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e8e8e8;
+  border-bottom: 2px solid var(--medical-border);
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -73,7 +74,7 @@
 
 .back-btn {
   padding: 0.75em 1.5em;
-  background-color: #95a5a6;
+  background-color: var(--medical-text-light);
   color: white;
   border: none;
   border-radius: 6px;
@@ -84,7 +85,8 @@
 }
 
 .back-btn:hover {
-  background-color: #7f8c8d;
+  background-color: var(--medical-text);
+  opacity: 0.9;
 }
 
 .details-content {
@@ -94,10 +96,11 @@
 }
 
 .details-section {
-  background-color: #fafafa;
+  background-color: var(--medical-bg);
   border-radius: 8px;
   padding: 1.5rem;
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .details-section h2 {
@@ -128,14 +131,14 @@
 
 .detail-label {
   font-weight: 600;
-  color: #555;
+  color: var(--medical-text-light);
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .detail-value {
-  color: #333;
+  color: var(--medical-text);
   font-size: 1rem;
   padding: 0.5rem 0;
 }
@@ -147,7 +150,7 @@
 }
 
 .history-subsection h3 {
-  color: #4a90e2;
+  color: var(--medical-primary);
   margin: 0 0 1rem 0;
   font-size: 1.1rem;
 }
@@ -160,31 +163,31 @@
 
 .history-list li {
   padding: 0.75rem;
-  background-color: white;
-  border-left: 3px solid #4a90e2;
+  background-color: var(--medical-card-bg);
+  border-left: 3px solid var(--medical-primary);
   margin-bottom: 0.5rem;
   border-radius: 4px;
-  color: #333;
+  color: var(--medical-text);
 }
 
 .no-data {
-  color: #999;
+  color: var(--medical-text-light);
   font-style: italic;
   padding: 0.75rem;
-  background-color: white;
+  background-color: var(--medical-card-bg);
   border-radius: 4px;
 }
 
 .remarks-content {
-  background-color: white;
+  background-color: var(--medical-card-bg);
   padding: 1rem;
   border-radius: 6px;
-  border-left: 3px solid #4a90e2;
+  border-left: 3px solid var(--medical-primary);
 }
 
 .remarks-content p {
   margin: 0;
-  color: #333;
+  color: var(--medical-text);
   line-height: 1.6;
   white-space: pre-wrap;
 }
@@ -192,18 +195,18 @@
 .not-found {
   text-align: center;
   padding: 4rem 2rem;
-  color: #7f8c8d;
+  color: var(--medical-text-light);
 }
 
 .not-found h2 {
   margin-bottom: 1rem;
-  color: #2c3e50;
+  color: var(--medical-text);
 }
 
 .not-found a {
   display: inline-block;
   padding: 0.75em 1.5em;
-  background-color: #4a90e2;
+  background-color: var(--medical-primary);
   color: white;
   text-decoration: none;
   border-radius: 6px;
@@ -212,7 +215,7 @@
 }
 
 .not-found a:hover {
-  background-color: #357abd;
+  background-color: var(--medical-primary-dark);
 }
 
 @media (max-width: 768px) {

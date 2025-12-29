@@ -3,11 +3,12 @@
 }
 
 .audiometry-report-container {
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 131, 143, 0.1);
+  box-shadow: 0 4px 16px var(--medical-shadow);
   padding: 2rem;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .report-header-actions {
@@ -109,9 +110,10 @@
 .report-form-section {
   margin-bottom: 2rem;
   padding: 1.75rem;
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .report-form-section h2 {
@@ -139,7 +141,7 @@
 
 .audiometry-form-group label {
   font-weight: 600;
-  color: #374151;
+  color: var(--medical-text);
   font-size: 0.875rem;
   margin: 0;
   line-height: 1.4;
@@ -148,22 +150,22 @@
 .audiometry-form-group input,
 .audiometry-form-group select {
   padding: 0.6em 0.8em;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--medical-input-border);
   border-radius: 6px;
   font-size: 0.9375rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  background-color: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--medical-input-bg);
   width: 100%;
   box-sizing: border-box;
   font-family: inherit;
-  color: #111827;
+  color: var(--medical-text);
   line-height: 1.5;
   min-height: 38px;
 }
 
 .audiometry-form-group input:hover,
 .audiometry-form-group select:hover {
-  border-color: #9ca3af;
+  border-color: var(--medical-primary-light);
 }
 
 .audiometry-form-group input:focus,
@@ -174,7 +176,7 @@
 }
 
 .audiometry-form-group input::placeholder {
-  color: #9ca3af;
+  color: var(--medical-text-light);
   font-size: 0.9rem;
 }
 
@@ -195,11 +197,12 @@
 
 /* Report Display Section */
 .audiometry-data-section {
-  background: white;
+  background: var(--medical-card-bg);
   padding: 2rem;
   margin-bottom: 1rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px var(--medical-shadow);
+  transition: background-color 0.3s ease;
 }
 
 .print-header {
@@ -219,7 +222,7 @@
 .company-name-print {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #555;
+  color: var(--medical-text-light);
   font-size: 1rem;
   margin: 0;
 }
@@ -227,13 +230,13 @@
 .company-name-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #555;
+  color: var(--medical-text);
 }
 
 .contractor-name-print {
   font-size: 1rem;
   font-weight: 600;
-  color: #555;
+  color: var(--medical-text-light);
   margin: 0;
   margin-top: 0.25rem;
 }
@@ -241,7 +244,7 @@
 .contractor-name-value {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #555;
+  color: var(--medical-text);
 }
 
 .patient-info-section {
@@ -281,8 +284,12 @@
   white-space: nowrap;
 }
 
+.info-item {
+  color: var(--medical-text);
+}
+
 .info-value {
-  color: #000000;
+  color: var(--medical-text);
   font-weight: normal;
 }
 
@@ -301,7 +308,8 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--medical-shadow);
+  background-color: var(--medical-card-bg);
 }
 
 .audiometry-table thead {
@@ -318,20 +326,25 @@
 
 .audiometry-table td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--medical-border);
+  color: var(--medical-text);
+  background-color: var(--medical-card-bg);
 }
 
 .audiometry-table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: var(--medical-hover-bg);
 }
 
 .frequency-input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--medical-input-border);
   border-radius: 4px;
   text-align: center;
   font-size: 0.9rem;
+  background-color: var(--medical-input-bg);
+  color: var(--medical-text);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .frequency-input:focus {
@@ -348,10 +361,11 @@
 }
 
 .chart-container {
-  background: #f8f9fa;
+  background: var(--medical-bg);
   padding: 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .chart-title {
@@ -365,29 +379,31 @@
 
 .left-ear-title,
 .right-ear-title {
-  color: #1976d2;
-  background-color: #e3f2fd;
-  border: 2px solid #1976d2;
+  color: var(--medical-primary);
+  background-color: rgba(0, 131, 143, 0.15);
+  border: 2px solid var(--medical-primary);
 }
 
 .chart-wrapper {
-  background: white;
+  background: var(--medical-card-bg);
   padding: 1rem;
   border-radius: 6px;
+  transition: background-color 0.3s ease;
 }
 
 .summary-section {
   display: flex;
   justify-content: space-around;
   padding: 0.5rem;
-  background: #e8f5f6;
+  background: var(--medical-bg);
   border-radius: 8px;
   border: 1px solid var(--medical-primary-light);
+  transition: background-color 0.3s ease;
 }
 
 .summary-item {
   font-size: 1.1rem;
-  color: #333;
+  color: var(--medical-text);
 }
 
 .summary-item strong {

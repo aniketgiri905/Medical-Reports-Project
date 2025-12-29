@@ -124,6 +124,29 @@
   gap: 0.75rem;
 }
 
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0 0 4px 2px;
+  margin-right: 0.75rem;
+  z-index: 1001;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
@@ -167,25 +190,27 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px var(--medical-shadow);
   min-width: 160px;
   z-index: 1000;
   overflow: hidden;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .mobile-menu-item {
   display: block;
   padding: 12px 20px;
-  color: var(--medical-primary-dark);
+  color: var(--medical-text);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
-  border-bottom: 1px solid #f0f0f0;
+  border: none;
+  border-bottom: 1px solid var(--medical-border);
   transition: all 0.2s ease;
   background: transparent;
-  border: none;
   width: 100%;
   text-align: left;
   cursor: pointer;
@@ -196,23 +221,23 @@
 }
 
 .mobile-menu-item:hover {
-  background: var(--medical-primary-light);
-  color: var(--medical-primary-dark);
+  background: var(--medical-hover-bg);
+  color: var(--medical-primary);
 }
 
 .mobile-menu-item.mobile-logout {
-  color: #e74c3c;
+  color: var(--medical-error);
 }
 
 .mobile-menu-item.mobile-logout:hover {
-  background: #fee;
-  color: #c0392b;
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--medical-error);
 }
 
 .login-button,
 .logout-button,
 .about-button {
-  padding: 8px 12px;
+  padding: 5.5px 12px;
   background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
   color: #fff;
   border: none;
@@ -238,7 +263,7 @@
 }
 
 .home-button {
-  padding: 5px 12px;
+  padding: 3.8px 12px;
   background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
   color: #fff;
   text-decoration: none;
@@ -343,6 +368,10 @@
     position: absolute;
     top: 0;
     right: 0;
+  }
+
+  .theme-toggle-btn {
+    display: none;
   }
 
   .desktop-buttons {

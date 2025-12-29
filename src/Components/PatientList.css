@@ -1,9 +1,10 @@
 .patient-list-container {
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 131, 143, 0.1);
+  box-shadow: 0 4px 16px var(--medical-shadow);
   padding: 2rem;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .list-header {
@@ -137,10 +138,11 @@
   overflow-x: auto;
   overflow-y: auto;
   border-radius: 10px;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
   max-height: calc(100vh - 300px);
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 131, 143, 0.08);
+  box-shadow: 0 2px 8px var(--medical-shadow);
+  transition: border-color 0.3s ease;
 }
 
 .table-container table {
@@ -154,23 +156,23 @@
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--medical-bg);
   border-radius: 4px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--medical-border);
   border-radius: 4px;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--medical-text-light);
 }
 
 .patients-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
+  background-color: var(--medical-card-bg);
 }
 
 .patients-table thead {
@@ -200,19 +202,19 @@
 }
 
 .sortable-header:hover {
-  background-color: #e9ecef;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sort-icon {
   margin-left: 0.5rem;
-  color: #4a90e2;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: bold;
 }
 
 .patients-table td {
   padding: 1rem;
-  border-bottom: 1px solid #e8e8e8;
-  color: #333;
+  border-bottom: 1px solid var(--medical-border);
+  color: var(--medical-text);
   position: relative;
 }
 
@@ -233,7 +235,7 @@
 }
 
 .patients-table tbody tr:hover {
-  background-color: #e0f7fa;
+  background-color: var(--medical-hover-bg);
 }
 
 .patients-table tbody tr:last-child td {
@@ -290,13 +292,14 @@
 }
 
 .actions-menu {
-  background: white;
-  border: 1px solid #e8e8e8;
+  background: var(--medical-card-bg);
+  border: 1px solid var(--medical-border);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px var(--medical-shadow);
   z-index: 1000;
   min-width: 110px;
   overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .menu-item {
@@ -310,8 +313,8 @@
   border: none;
   cursor: pointer;
   font-size: 0.9rem;
-  transition: background-color 0.2s;
-  color: #333;
+  transition: background-color 0.2s, color 0.3s ease;
+  color: var(--medical-text);
 }
 
 .menu-item-icon {
@@ -324,23 +327,23 @@
 }
 
 .menu-item:hover {
-  background-color: #f8f9fa;
+  background-color: var(--medical-hover-bg);
 }
 
 .menu-item.edit-item {
-  color: #4a90e2;
+  color: var(--medical-primary);
 }
 
 .menu-item.edit-item:hover {
-  background-color: #e3f2fd;
+  background-color: rgba(0, 131, 143, 0.15);
 }
 
 .menu-item.delete-item {
-  color: #e74c3c;
+  color: var(--medical-error);
 }
 
 .menu-item.delete-item:hover {
-  background-color: #ffebee;
+  background-color: rgba(239, 68, 68, 0.1);
 }
 
 @media (max-width: 768px) {

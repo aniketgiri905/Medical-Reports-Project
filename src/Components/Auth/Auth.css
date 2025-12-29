@@ -2,6 +2,10 @@
 .login-bg {
     background: linear-gradient(135deg, #667eea, #764ba2);
   }
+
+:root.dark-mode .login-bg {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+  }
   
   /* Container */
   .login-container {
@@ -14,14 +18,16 @@
   /* Card */
   .login-card {
     position: relative;
-    background: #ffffff;
+    background: var(--medical-card-bg);
     padding: 3rem;
     border-radius: 16px;
     width: 100%;
     max-width: 600px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 25px 60px var(--medical-shadow);
+    border: 1px solid var(--medical-border);
     animation: fadeInUp 0.6s ease;
     overflow: visible;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
   
   @keyframes fadeInUp {
@@ -84,12 +90,12 @@
     margin-bottom: 0.5rem;
     text-align: center;
     font-size: 2rem;
-    color: #2d3748;
+    color: var(--medical-text);
   }
   
   .subtitle {
     text-align: center;
-    color: #718096;
+    color: var(--medical-text-light);
     margin-bottom: 2rem;
   }
   
@@ -102,15 +108,17 @@
     display: block;
     margin-bottom: 0.4rem;
     font-weight: 600;
-    color: #4a5568;
+    color: var(--medical-text);
   }
   
   .input-group input {
     width: 100%;
     padding: 0.85rem 1rem;
     border-radius: 10px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid var(--medical-input-border);
     font-size: 1rem;
+    background-color: var(--medical-input-bg);
+    color: var(--medical-text);
     transition: all 0.3s ease;
   }
   
@@ -118,6 +126,10 @@
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+
+  .input-group input::placeholder {
+    color: var(--medical-text-light);
   }
 
   /* Password input wrapper */
@@ -146,13 +158,13 @@
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    color: #718096;
+    color: var(--medical-text-light);
     transition: color 0.2s ease;
     z-index: 1;
   }
 
   .password-toggle-btn:hover:not(:disabled) {
-    color: #667eea;
+    color: var(--medical-primary);
   }
 
   .password-toggle-btn:disabled {
@@ -202,7 +214,7 @@
     margin-top: 1.8rem;
     text-align: center;
     font-size: 0.9rem;
-    color: #718096;
+    color: var(--medical-text-light);
   }
   
   /* Responsive */

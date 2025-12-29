@@ -4,17 +4,19 @@
   justify-content: center;
   align-items: flex-start;
   padding: 20px;
-  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  background: linear-gradient(to bottom, var(--medical-bg) 0%, var(--medical-bg-light) 100%);
+  transition: background 0.3s ease;
 }
 
 .about-us-card {
-  background: #ffffff;
+  background: var(--medical-card-bg);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 131, 143, 0.15);
+  box-shadow: 0 8px 32px var(--medical-shadow);
   padding: 32px;
   max-width: 1100px;
   width: 100%;
-  border: 1px solid #e0f2f1;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .about-header {
@@ -33,7 +35,7 @@
 }
 
 .about-subtitle {
-  color: #666;
+  color: var(--medical-text-light);
   font-size: 18px;
   font-weight: 400;
   margin: 0;
@@ -73,7 +75,7 @@
 }
 
 .about-section p {
-  color: #555;
+  color: var(--medical-text);
   font-size: 1.05rem;
   line-height: 1.9;
   text-align: justify;
@@ -88,12 +90,12 @@
 }
 
 .feature-card {
-  background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
-  border: 2px solid #e0f2f1;
+  background: linear-gradient(to bottom, var(--medical-card-bg) 0%, var(--medical-bg) 100%);
+  border: 2px solid var(--medical-border);
   border-radius: 12px;
   padding: 1.5rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 131, 143, 0.08);
+  box-shadow: 0 2px 8px var(--medical-shadow);
 }
 
 .feature-card:hover {
@@ -115,7 +117,7 @@
 }
 
 .feature-card p {
-  color: #666;
+  color: var(--medical-text-light);
   font-size: 0.95rem;
   line-height: 1.7;
   margin: 0;
@@ -129,13 +131,13 @@
 }
 
 .advantages-list li {
-  color: #555;
+  color: var(--medical-text);
   font-size: 1.05rem;
   line-height: 2;
   padding: 0.75rem 0;
   padding-left: 2rem;
   position: relative;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--medical-border);
 }
 
 .advantages-list li:last-child {
@@ -308,7 +310,7 @@
   right: 30px;
   width: 48px;
   height: 48px;
-  background: #ffffff;
+  background: var(--medical-card-bg);
   color: var(--medical-primary);
   border: 2px solid var(--medical-primary-light);
   border-radius: 50%;
@@ -319,7 +321,7 @@
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--medical-shadow);
 }
 
 .scroll-to-top-btn:hover {

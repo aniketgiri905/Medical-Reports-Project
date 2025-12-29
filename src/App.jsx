@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
+import { ThemeProvider } from './context/ThemeContext'
 import PatientForm from './Components/PatientForm'
 import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
@@ -63,20 +64,22 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <div className="app">
+    <ThemeProvider>
+      <AuthProvider>
+        <div className="app">
         <Toaster 
           position="top-right"
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#363636',
-              color: '#fff',
+              background: 'var(--medical-card-bg)',
+              color: 'var(--medical-text)',
               borderRadius: '8px',
               padding: '16px',
               fontSize: '14px',
               fontWeight: '500',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              boxShadow: '0 4px 12px var(--medical-shadow)',
+              border: '1px solid var(--medical-border)',
             },
             success: {
               duration: 3000,
@@ -175,8 +178,9 @@ function App() {
             />
           </Routes>
         </main>
-      </div>
-    </AuthProvider>
+        </div>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 

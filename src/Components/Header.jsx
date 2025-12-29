@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import './Header.css'
 
 function Header({ hospitalName, hospitalAddress1, hospitalAddress2, companyName }) {
   const location = useLocation()
   const navigate = useNavigate()
   const { isAuthenticated, logout } = useAuth()
+  const { isDarkMode, toggleTheme } = useTheme()
   const isHomePage = location.pathname === '/'
   const isLoginPage = location.pathname === '/login'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -62,6 +64,18 @@ function Header({ hospitalName, hospitalAddress1, hospitalAddress2, companyName 
           </div>
         </div>
         <div className="header-actions-right" ref={menuRef}>
+          {/* Theme Toggle Button */}
+          {!isLoginPage && (
+            <button 
+              className="theme-toggle-btn"
+              onClick={toggleTheme}
+              aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {isDarkMode ? '☀️' : '🌙'}
+            </button>
+          )}
+
           {/* Hamburger Menu Button (Mobile Only) */}
           {!isLoginPage && (
             <button 
@@ -111,15 +125,21 @@ function Header({ hospitalName, hospitalAddress1, hospitalAddress2, companyName 
                 </Link>
               )}
               <Link to="/about" className="mobile-menu-item" onClick={closeMobileMenu}>
-                About Us
+                ℹ️ About Us
               </Link>
+              <button 
+                className="mobile-menu-item" 
+                onClick={() => { toggleTheme(); closeMobileMenu(); }}
+              >
+                {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+              </button>
               {isAuthenticated ? (
                 <button onClick={handleLogout} className="mobile-menu-item mobile-logout" title="Logout">
-                  Logout
+                  🚪 Logout
                 </button>
               ) : (
                 <Link to="/login" className="mobile-menu-item" onClick={closeMobileMenu}>
-                  Sign In
+                  🔐 Sign In
                 </Link>
               )}
             </div>

@@ -15,7 +15,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  /* Medical Theme Colors */
+  /* Medical Theme Colors - Light Mode */
   --medical-primary: #00838f;
   --medical-primary-dark: #006064;
   --medical-primary-light: #4fb3bf;
@@ -28,6 +28,34 @@
   --medical-border: #b0bec5;
   --medical-success: #26a69a;
   --medical-error: #ef5350;
+  --medical-card-bg: #ffffff;
+  --medical-shadow: rgba(0, 0, 0, 0.1);
+  --medical-input-bg: #ffffff;
+  --medical-input-border: #ddd;
+  --medical-hover-bg: #f5f5f5;
+}
+
+/* Dark Mode Variables */
+:root.dark-mode {
+  --medical-primary: #4fb3bf;
+  --medical-primary-dark: #00838f;
+  --medical-primary-light: #80c4cc;
+  --medical-secondary: #26c6da;
+  --medical-accent: #4db6ac;
+  --medical-bg: #1a1a1a;
+  --medical-bg-light: #2d2d2d;
+  --medical-text: #e0e0e0;
+  --medical-text-light: #b0b0b0;
+  --medical-border: #404040;
+  --medical-success: #4db6ac;
+  --medical-error: #ef5350;
+  --medical-card-bg: #2d2d2d;
+  --medical-shadow: rgba(0, 0, 0, 0.5);
+  --medical-input-bg: #3a3a3a;
+  --medical-input-border: #555555;
+  --medical-hover-bg: #3a3a3a;
+  color: var(--medical-text);
+  background-color: var(--medical-bg);
 }
 
 body {
@@ -38,6 +66,9 @@ body {
   -webkit-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  background-color: var(--medical-bg);
+  color: var(--medical-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Improve touch targets on mobile */
@@ -86,9 +117,12 @@ input, select, textarea {
   font-family: inherit;
   font-size: 1em;
   padding: 0.5em;
-  border: 1px solid #ddd;
+  border: 1px solid var(--medical-input-border);
   border-radius: 4px;
   width: 100%;
+  background-color: var(--medical-input-bg);
+  color: var(--medical-text);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 input:focus, select:focus, textarea:focus {
