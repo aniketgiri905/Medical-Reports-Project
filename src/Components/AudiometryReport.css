@@ -230,6 +230,20 @@
   color: #555;
 }
 
+.contractor-name-print {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+  margin-top: 0.25rem;
+}
+
+.contractor-name-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #555;
+}
+
 .patient-info-section {
   display: flex;
   width: 100%;
@@ -459,6 +473,14 @@
 
   .company-name-value {
     font-size: 1.2rem;
+  }
+
+  .contractor-name-print {
+    font-size: 0.85rem;
+  }
+
+  .contractor-name-value {
+    font-size: 1rem;
   }
 
   .info-row {

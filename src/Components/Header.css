@@ -102,7 +102,7 @@
 
 .login-button,
 .logout-button {
-  padding: 5px 12px;
+  padding: 8px 12px;
   background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
   color: #fff;
   border: none;

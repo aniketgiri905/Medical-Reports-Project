@@ -80,6 +80,7 @@ function AudiometryReport() {
 
   const [reportData, setReportData] = useState({
     companyName: '',
+    contractorName: '',
     medicalTestDate: getTodayDate(),
     name: '',
     age: '',
@@ -88,7 +89,6 @@ function AudiometryReport() {
     departmentName: '',
     sex: '',
     designation: '',
-    dateOfBirth: '',
     rightEar: {
       '500': '15',
       '1000': '10',
@@ -142,6 +142,7 @@ function AudiometryReport() {
         const convertRowToData = (row) => {
           return {
             companyName: row['Company Name'] || row['Company'] || '',
+            contractorName: row['Contractor Name'] || row['Contractor'] || '',
             medicalTestDate: row['Medical Test Date'] || row['Test Date'] || '',
             name: row['Name'] || '',
             age: row['Age'] || '',
@@ -150,7 +151,6 @@ function AudiometryReport() {
             departmentName: row['Department Name'] || row['Department'] || row['Dep. Name'] || '',
             sex: row['Sex'] || row['Gender'] || '',
             designation: row['Designation'] || '',
-            dateOfBirth: row['Date Of Birth'] || row['DOB'] || row['Date of Birth'] || '',
             rightEar: {
               '500': row['Right 500'] || row['Right Ear 500'] || '',
               '1000': row['Right 1000'] || row['Right Ear 1000'] || '',
@@ -385,7 +385,7 @@ function AudiometryReport() {
 
       pdf.setFont(undefined, 'bold')
       pdf.setTextColor(...primaryColor)
-      const labelWidth = Math.max(pdf.getTextWidth(labelText), 38)
+      const labelWidth = Math.max(pdf.getTextWidth(labelText), 30)
       pdf.text(labelText, currentX, currentY)
 
       pdf.setFont(undefined, 'normal')
@@ -398,12 +398,12 @@ function AudiometryReport() {
 
     // Add patient info items in the order shown in image
     addPatientInfoItem('Medical Test Date', dataToUse.medicalTestDate)
-    addPatientInfoItem('Date Of Birth', dataToUse.dateOfBirth)
-    addPatientInfoItem('Sex', dataToUse.sex)
     addPatientInfoItem('Name', dataToUse.name)
+    addPatientInfoItem('Sex', dataToUse.sex)
+    addPatientInfoItem('Age', dataToUse.age, true)
+    addPatientInfoItem('Contractor Name', dataToUse.contractorName)
     addPatientInfoItem('CERTI NO.', dataToUse.certNo)
     addPatientInfoItem('Designation', dataToUse.designation)
-    addPatientInfoItem('Age', dataToUse.age, true)
     addPatientInfoItem('Emp Code', dataToUse.empCode)
     addPatientInfoItem('Dep. Name', dataToUse.departmentName)
 
@@ -707,7 +707,23 @@ function AudiometryReport() {
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
+    
+    // Prevent negative values for numeric fields
+    if (type === 'number') {
+      // Prevent negative sign or negative values
+      if (value === '-' || (value !== '' && parseFloat(value) < 0)) {
+        return // Don't update if negative sign or negative value
+      }
+    }
+    
+    // Prevent negative signs in text fields that shouldn't have them
+    if (type === 'text' && (name === 'certNo' || name === 'empCode')) {
+      if (value.includes('-')) {
+        return // Don't allow minus sign in certificate number or employee code
+      }
+    }
+    
     setReportData(prev => ({
       ...prev,
       [name]: value
@@ -715,6 +731,11 @@ function AudiometryReport() {
   }
 
   const handleEarChange = (ear, frequency, value) => {
+    // Prevent negative values for audiometry readings
+    // Prevent negative sign or negative values
+    if (value === '-' || (value !== '' && parseFloat(value) < 0)) {
+      return // Don't update if negative sign or negative value
+    }
     setReportData(prev => ({
       ...prev,
       [ear]: {
@@ -858,6 +879,16 @@ function AudiometryReport() {
             />
           </div>
           <div className="audiometry-form-group">
+            <label>Contractor Name</label>
+            <input
+              type="text"
+              name="contractorName"
+              value={reportData.contractorName}
+              onChange={handleChange}
+              placeholder="Enter contractor name"
+            />
+          </div>
+          <div className="audiometry-form-group">
             <label>Medical Test Date <span className="required-asterisk">*</span></label>
             <input
               type="date"
@@ -886,6 +917,7 @@ function AudiometryReport() {
               value={reportData.age}
               onChange={handleChange}
               placeholder="Enter age"
+              min="0"
               required
             />
           </div>
@@ -944,15 +976,6 @@ function AudiometryReport() {
               placeholder="Enter designation"
             />
           </div>
-          <div className="audiometry-form-group">
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={reportData.dateOfBirth}
-              onChange={handleChange}
-            />
-          </div>
         </div>
       </div>
 
@@ -979,6 +1002,11 @@ function AudiometryReport() {
               Company: <strong className='company-name-value'>{reportData.companyName}</strong>
             </p>
           )}
+          {reportData.contractorName && (
+            <p className="contractor-name-print">
+              Contractor: <strong className='contractor-name-value'>{reportData.contractorName}</strong>
+            </p>
+          )}
         </div>
 
         <div className="patient-info-section">
@@ -996,11 +1024,6 @@ function AudiometryReport() {
             {reportData.age && (
               <div className="info-item">
                 <strong>Age:</strong> {reportData.age} yrs
-              </div>
-            )}
-            {reportData.dateOfBirth && (
-              <div className="info-item">
-                <strong>Date Of Birth:</strong> {reportData.dateOfBirth}
               </div>
             )}
             {reportData.certNo && (
@@ -1052,6 +1075,7 @@ function AudiometryReport() {
                         value={reportData.rightEar[freq]}
                         onChange={(e) => handleEarChange('rightEar', freq, e.target.value)}
                         className="frequency-input"
+                        min="0"
                       />
                     </td>
                     <td>
@@ -1060,6 +1084,7 @@ function AudiometryReport() {
                         value={reportData.leftEar[freq]}
                         onChange={(e) => handleEarChange('leftEar', freq, e.target.value)}
                         className="frequency-input"
+                        min="0"
                       />
                     </td>
                   </tr>
