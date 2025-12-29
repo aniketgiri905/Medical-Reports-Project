@@ -708,7 +708,7 @@ function AudiometryReport() {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target
-    
+
     // Prevent negative values for numeric fields
     if (type === 'number') {
       // Prevent negative sign or negative values
@@ -716,14 +716,14 @@ function AudiometryReport() {
         return // Don't update if negative sign or negative value
       }
     }
-    
+
     // Prevent negative signs in text fields that shouldn't have them
     if (type === 'text' && (name === 'certNo' || name === 'empCode')) {
       if (value.includes('-')) {
         return // Don't allow minus sign in certificate number or employee code
       }
     }
-    
+
     setReportData(prev => ({
       ...prev,
       [name]: value
@@ -779,7 +779,7 @@ function AudiometryReport() {
       }, 500)
       return
     }
-    
+
     if (!reportData.name || !reportData.medicalTestDate || !reportData.age || !reportData.sex || !reportData.certNo) {
       toast.error('Please fill all required fields (Medical Test Date, Name, Age, Sex, Certificate Number)')
       return
@@ -829,7 +829,7 @@ function AudiometryReport() {
         <h1>Audiometry Report Generator</h1>
         <div className="header-buttons">
           {!isAuthenticated ? (
-            <button 
+            <button
               className="file-upload-btn disabled"
               onClick={() => {
                 toast.error('Authentication required to upload Excel files. Redirecting to login...', {
@@ -1002,19 +1002,19 @@ function AudiometryReport() {
               Company: <strong className='company-name-value'>{reportData.companyName}</strong>
             </p>
           )}
-          {reportData.contractorName && (
-            <p className="contractor-name-print">
-              Contractor: <strong className='contractor-name-value'>{reportData.contractorName}</strong>
-            </p>
-          )}
         </div>
 
         <div className="patient-info-section">
           <div className="info-row">
             {reportData.medicalTestDate && (
               <div className="info-item">
-                <strong>Medical Test Date:</strong> {reportData.medicalTestDate}
+                <strong>Med. Test Date:</strong> {reportData.medicalTestDate}
               </div>
+            )}
+            {reportData.contractorName && (
+              <p className="info-item">
+                <strong>Contractor:</strong> {reportData.contractorName}
+              </p>
             )}
             {reportData.name && (
               <div className="info-item">
