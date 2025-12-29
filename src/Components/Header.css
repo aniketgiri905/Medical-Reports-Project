@@ -8,17 +8,35 @@
 .header-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
+  min-height: 80px;
 }
 
-.hospital-info,
+.hospital-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
 .company-info {
   display: flex;
   align-items: center;
   gap: 1rem;
+  position: absolute;
+  right: -35px;
+  bottom: 0;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.company-info > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .logo-placeholder {
@@ -291,8 +309,15 @@
   }
 
   .company-info {
+    position: static;
     width: 100%;
     margin-top: 0;
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  .company-info > div {
+    align-items: flex-start;
   }
 
   .company-info h2 {
