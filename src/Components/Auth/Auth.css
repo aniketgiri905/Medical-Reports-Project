@@ -219,11 +219,27 @@
       width: initial;
     }
     .monkey-peeker {
-      top: 50%;
-      right: -65px;
+      top: 0.5rem;
+      left: -10px;
+      right: auto;
+      z-index: 25;
+      transform: none;
     }
     .monkey-image {
-      width: 80px;
+      width: 75px;
+    }
+    
+    @keyframes monkeySlideIn {
+      0% {
+        left: -30px;
+        right: auto;
+        opacity: 0;
+      }
+      100% {
+        left: -18px;
+        right: auto;
+        opacity: 1;
+      }
     }
   }
 
