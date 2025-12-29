@@ -1,9 +1,82 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../context/AuthContext'
 import { exportToExcel, exportAllToPDF } from '../utils/helpers'
 import './PatientList.css'
+
+// Actions Menu Component with Portal
+function ActionsMenu({ patientId, isOpen, onToggle, onEdit, onDelete }) {
+  const buttonRef = useRef(null)
+  const menuRef = useRef(null)
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 })
+
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const updatePosition = () => {
+        if (buttonRef.current) {
+          const buttonRect = buttonRef.current.getBoundingClientRect()
+          setMenuPosition({
+            top: buttonRect.bottom + 4,
+            right: window.innerWidth - buttonRect.right
+          })
+        }
+      }
+      
+      updatePosition()
+      
+      // Update position on scroll or resize
+      window.addEventListener('scroll', updatePosition, true)
+      window.addEventListener('resize', updatePosition)
+      
+      return () => {
+        window.removeEventListener('scroll', updatePosition, true)
+        window.removeEventListener('resize', updatePosition)
+      }
+    }
+  }, [isOpen])
+
+  return (
+    <div className="actions-menu-container">
+      <button 
+        ref={buttonRef}
+        className="actions-menu-btn"
+        onClick={onToggle}
+        aria-label="Actions"
+      >
+        <span>⋯</span>
+      </button>
+      {isOpen && createPortal(
+        <div 
+          ref={menuRef}
+          className="actions-menu"
+          style={{
+            position: 'fixed',
+            top: `${menuPosition.top}px`,
+            right: `${menuPosition.right}px`,
+          }}
+        >
+          <button 
+            className="menu-item edit-item"
+            onClick={onEdit}
+          >
+            <span className="menu-item-icon">✏️</span>
+            Edit
+          </button>
+          <button 
+            className="menu-item delete-item"
+            onClick={onDelete}
+          >
+            <span className="menu-item-icon">🗑️</span>
+            Delete
+          </button>
+        </div>,
+        document.body
+      )}
+    </div>
+  )
+}
 
 function PatientList({ patients, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -104,7 +177,7 @@ function PatientList({ patients, onDelete }) {
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (!e.target.closest('.actions-menu-container')) {
+      if (!e.target.closest('.actions-menu-container') && !e.target.closest('.actions-menu')) {
         setOpenMenuId(null)
       }
     }
@@ -195,31 +268,13 @@ function PatientList({ patients, onDelete }) {
                   <td>{patient.contactNo || 'N/A'}</td>
                   <td>{patient.medicalTestDate || 'N/A'}</td>
                   <td className="actions-cell">
-                    <div className="actions-menu-container">
-                      <button 
-                        className="actions-menu-btn"
-                        onClick={() => toggleMenu(patient.id)}
-                        aria-label="Actions"
-                      >
-                        <span>⋯</span>
-                      </button>
-                      {openMenuId === patient.id && (
-                        <div className="actions-menu">
-                          <button 
-                            className="menu-item edit-item"
-                            onClick={() => handleEdit(patient.id)}
-                          >
-                            Edit
-                          </button>
-                          <button 
-                            className="menu-item delete-item"
-                            onClick={() => handleDelete(patient.id, patient.patientName)}
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                    <ActionsMenu
+                      patientId={patient.id}
+                      isOpen={openMenuId === patient.id}
+                      onToggle={() => toggleMenu(patient.id)}
+                      onEdit={() => handleEdit(patient.id)}
+                      onDelete={() => handleDelete(patient.id, patient.patientName)}
+                    />
                   </td>
                 </tr>
               ))}

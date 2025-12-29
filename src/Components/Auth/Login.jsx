@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../../context/AuthContext'
+import monkeyImage from '../../assets/Img/monkey.png'
 import './Auth.css'
 import '../Header.css'
 
@@ -20,6 +21,15 @@ function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(() => {
+    if(showPassword === true) {
+      setTimeout(() => {
+        setShowPassword(false)
+      }, 5000);
+    }
+  }, [showPassword])
 
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -64,6 +74,11 @@ function Login() {
         <Link to="/" className="home-button" title="Go to Home">
           🏠 Home
         </Link>
+        {showPassword && (
+          <div className="monkey-peeker">
+            <img src={monkeyImage} alt="Monkey peeking" className="monkey-image" />
+          </div>
+        )}
         <h2>Welcome Back</h2>
         <p className="subtitle">Sign in to continue</p>
 
@@ -79,15 +94,27 @@ function Login() {
             />
           </div>
 
-          <div className="input-group">
+          <div className="input-group password-input-group">
             <label>Password</label>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                title={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
+            </div>
           </div>
 
           <button className="login-button" type="submit" disabled={loading}>

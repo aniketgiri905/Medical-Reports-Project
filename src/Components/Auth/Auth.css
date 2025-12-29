@@ -46,6 +46,39 @@
     min-width: auto;
   }
 
+  /* Monkey peeker animation */
+  .monkey-peeker {
+    position: absolute;
+    top: 40%;
+    right: -131px;
+    z-index: 20;
+    transform: translateY(-50%);
+    animation: monkeySlideIn 0.8s ease-out forwards;
+    background: transparent;
+    background-color: transparent;
+  }
+
+  .monkey-image {
+    width: 150px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+    background: transparent;
+    background-color: transparent;
+    mix-blend-mode: normal;
+  }
+
+  @keyframes monkeySlideIn {
+    0% {
+      right: -110px;
+      opacity: 0;
+    }
+    100% {
+      right: -131px;
+      opacity: 1;
+    }
+  }
+
   /* Header */
   .login-card h2 {
     margin-bottom: 0.5rem;
@@ -85,6 +118,53 @@
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+
+  /* Password input wrapper */
+  .password-input-group {
+    position: relative;
+  }
+
+  .password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-input-wrapper input {
+    padding-right: 3rem;
+  }
+
+  .password-toggle-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: #718096;
+    transition: color 0.2s ease;
+    z-index: 1;
+  }
+
+  .password-toggle-btn:hover:not(:disabled) {
+    color: #667eea;
+  }
+
+  .password-toggle-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .password-toggle-btn:hover {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
   }
   
   /* Button */
@@ -137,6 +217,13 @@
     }
     .header-actions-right .login-button {
       width: initial;
+    }
+    .monkey-peeker {
+      top: 50%;
+      right: -65px;
+    }
+    .monkey-image {
+      width: 80px;
     }
   }
 
