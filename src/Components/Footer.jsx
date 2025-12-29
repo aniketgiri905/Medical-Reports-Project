@@ -26,7 +26,7 @@ function Footer() {
           <h4>Support</h4>
           <ul>
             <li><Link to="/help">Help & Documentation</Link></li>
-            <li>Contact Administrator</li>
+            <li><Link to="/contact">Contact Administrator</Link></li>
             <li><Link to="/system-info">System Information</Link></li>
           </ul>
         </div>

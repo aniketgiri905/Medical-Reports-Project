@@ -10,6 +10,7 @@ import AudiometryReport from './Components/AudiometryReport'
 import AboutUs from './Components/AboutUs'
 import Help from './Components/Help'
 import SystemInfo from './Components/SystemInfo'
+import Contact from './Components/Contact'
 import Header from './Components/Header'
 import Footer from './Components/Footer'
 import Login from './Components/Auth/Login'
@@ -184,6 +185,10 @@ function App() {
             <Route 
               path="/system-info" 
               element={<SystemInfo />} 
+            />
+            <Route 
+              path="/contact" 
+              element={<Contact />} 
             />
             <Route 
               path="/login" 

@@ -1,0 +1,420 @@
+.contact-container {
+  min-height: calc(100vh - 220px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  background: var(--medical-bg-gradient);
+  transition: background 0.3s ease;
+}
+
+.contact-card {
+  background: var(--medical-card-bg);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px var(--medical-shadow);
+  padding: 32px;
+  max-width: 1100px;
+  width: 100%;
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 25px;
+  border-bottom: 3px solid var(--medical-primary-light);
+}
+
+.contact-card h1 {
+  color: var(--medical-primary-dark);
+  font-size: 2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.contact-subtitle {
+  color: var(--medical-text-light);
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+  font-style: italic;
+}
+
+.contact-sections-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+
+.contact-section {
+  margin-bottom: 3rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 0;
+}
+
+.contact-section-half {
+  margin-bottom: 0;
+}
+
+.contact-sections-row .contact-section {
+  margin-bottom: 0;
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  padding-bottom: 6px;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--medical-primary-light) 0%, var(--medical-primary) 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px var(--medical-shadow);
+}
+
+.section-content {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.contact-section h2 {
+  color: var(--medical-primary-dark);
+  font-size: 26px;
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+.contact-section p {
+  color: var(--medical-text);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  text-align: justify;
+  margin-bottom: 1rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.help-list {
+  /* list-style: none; */
+  padding: 0;
+  padding-left: 0;
+  margin: 1.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.help-list li {
+display: flex;
+align-items: center;
+  color: var(--medical-text);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-left: 2rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* .help-list li::before {
+  /* content: "✓"; */
+  position: absolute;
+  left: 0;
+  color: var(--medical-success);
+  font-weight: bold;
+  font-size: 1.3rem;
+  background: var(--medical-primary-light);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0.1rem;
+  flex-shrink: 0;
+} */
+
+.info-box {
+  background: var(--medical-bg-light);
+  border-left: 4px solid var(--medical-primary);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.info-box strong {
+  color: var(--medical-primary-dark);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.resource-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px var(--medical-shadow);
+}
+
+.resource-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px var(--medical-shadow-hover);
+  background: linear-gradient(135deg, var(--medical-primary-dark) 0%, var(--medical-primary) 100%);
+}
+
+.scroll-to-top-btn {
+  position: fixed;
+  font-size: 24px;
+  bottom: 30px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  background: var(--medical-card-bg);
+  color: var(--medical-primary);
+  border: 2px solid var(--medical-primary-light);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 2px 8px var(--medical-shadow);
+}
+
+.scroll-to-top-btn:hover {
+  background: var(--medical-primary);
+  color: white;
+  border-color: var(--medical-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.25);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 12px;
+    min-height: calc(100vh - 180px);
+  }
+
+  .contact-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .contact-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+  }
+
+  .contact-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .contact-subtitle {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .contact-sections-row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .contact-section {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
+    align-self: center;
+    padding-bottom: 4px;
+  }
+
+  .section-content {
+    width: 100%;
+  }
+
+  .contact-section h2 {
+    font-size: 1.25rem;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .contact-section p {
+    font-size: 0.9rem;
+    text-align: left;
+    line-height: 1.7;
+  }
+
+  .help-list {
+    font-size: 0.9rem;
+    padding-left: 0;
+  }
+
+  .help-list li {
+    font-size: 0.9rem;
+    padding-left: 32px;
+    margin-bottom: 0.5rem;
+    line-height: 1.7;
+  }
+
+  .help-list li::before {
+    width: 24px;
+    height: 24px;
+    font-size: 1.1rem;
+    top: 0.1rem;
+  }
+
+  .info-box {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .resource-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .resource-link {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .scroll-to-top-btn {
+    width: 44px;
+    height: 44px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 20px;
+    border-width: 1.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 8px;
+  }
+
+  .contact-card {
+    padding: 16px 12px;
+  }
+
+  .contact-card h1 {
+    font-size: 1.3rem;
+  }
+
+  .contact-subtitle {
+    font-size: 13px;
+  }
+
+  .section-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+  }
+
+  .contact-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .contact-section p {
+    font-size: 0.85rem;
+  }
+
+  .help-list {
+    font-size: 0.85rem;
+    padding-left: 0;
+  }
+
+  .help-list li {
+    font-size: 0.85rem;
+    padding-left: 28px;
+  }
+
+  .help-list li::before {
+    width: 22px;
+    height: 22px;
+    font-size: 1rem;
+    top: 0.1rem;
+  }
+
+  .info-box {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .resource-link {
+    font-size: 0.9rem;
+  }
+
+  .scroll-to-top-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 12px;
+    right: 12px;
+    font-size: 18px;
+  }
+}
+
