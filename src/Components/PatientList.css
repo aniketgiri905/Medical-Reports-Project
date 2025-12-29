@@ -249,7 +249,7 @@
 
 .sr-no-cell {
   text-align: center;
-  color: #666;
+  color: var(--medical-text-light);
   font-weight: 500;
 }
 
@@ -275,7 +275,7 @@
   cursor: pointer;
   padding: 0.5rem;
   font-size: 1.5rem;
-  color: #666;
+  color: var(--medical-text-light);
   line-height: 1;
   display: flex;
   align-items: center;
@@ -283,12 +283,12 @@
   width: 32px;
   height: 32px;
   border-radius: 4px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .actions-menu-btn:hover {
-  background-color: #e8e8e8;
-  color: #333;
+  background-color: var(--medical-hover-bg);
+  color: var(--medical-text);
 }
 
 .actions-menu {

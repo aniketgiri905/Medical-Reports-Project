@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import * as XLSX from 'xlsx'
 import { toast } from 'react-hot-toast'
@@ -15,6 +15,27 @@ function AudiometryReport() {
   const reportRef = useRef(null)
   const rightChartRef = useRef(null)
   const leftChartRef = useRef(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true)
+      } else {
+        setShowScrollTop(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   // Get today's date in YYYY-MM-DD format
   const getTodayDate = () => {
@@ -1175,6 +1196,17 @@ function AudiometryReport() {
           </div>
         </div>
       </div>
+
+      {showScrollTop && (
+        <button 
+          className="scroll-to-top-btn" 
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          title="Scroll to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
   )
 }

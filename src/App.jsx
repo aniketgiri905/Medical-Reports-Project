@@ -8,8 +8,12 @@ import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
 import AudiometryReport from './Components/AudiometryReport'
 import AboutUs from './Components/AboutUs'
+import Help from './Components/Help'
+import SystemInfo from './Components/SystemInfo'
 import Header from './Components/Header'
+import Footer from './Components/Footer'
 import Login from './Components/Auth/Login'
+import ScrollToTop from './Components/ScrollToTop'
 import './App.css'
 
 function App() {
@@ -66,6 +70,7 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
+        <ScrollToTop />
         <div className="app">
         <Toaster 
           position="top-right"
@@ -173,11 +178,20 @@ function App() {
               element={<AboutUs />} 
             />
             <Route 
+              path="/help" 
+              element={<Help />} 
+            />
+            <Route 
+              path="/system-info" 
+              element={<SystemInfo />} 
+            />
+            <Route 
               path="/login" 
               element={<Login />} 
             />
           </Routes>
         </main>
+        <Footer />
         </div>
       </AuthProvider>
     </ThemeProvider>
