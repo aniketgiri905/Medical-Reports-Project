@@ -27,7 +27,7 @@ function Login() {
     if(showPassword === true) {
       setTimeout(() => {
         setShowPassword(false)
-      }, 50000);
+      }, 5000);
     }
   }, [showPassword])
 
