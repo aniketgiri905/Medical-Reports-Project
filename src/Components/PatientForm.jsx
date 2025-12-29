@@ -89,6 +89,27 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
   // Mode selection: null = not selected, 'import' = excel import, 'manual' = manual entry
   const [entryMode, setEntryMode] = useState(isEdit ? 'manual' : null)
   const fileInputRef = useRef(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true)
+      } else {
+        setShowScrollTop(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
 
   const [formData, setFormData] = useState({
     hospitalName: settings?.hospitalName || 'Hospital Name',
@@ -479,6 +500,17 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
             </div>
           </div>
         </div>
+
+        {showScrollTop && (
+          <button 
+            className="scroll-to-top-btn" 
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            title="Scroll to top"
+          >
+            ↑
+          </button>
+        )}
       </div>
     )
   }
@@ -1288,6 +1320,17 @@ function PatientForm({ patients, onSave, onBulkSave, settings, onSettingsChange 
           <button type="button" onClick={() => navigate('/')}>Cancel</button>
         </div>
       </form>
+
+      {showScrollTop && (
+        <button 
+          className="scroll-to-top-btn" 
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          title="Scroll to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
   )
 }

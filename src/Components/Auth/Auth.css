@@ -262,7 +262,6 @@
 
     .login-card h2 {
       font-size: 1.6rem;
-      padding-right: 4rem; /* Add padding to prevent overlap with home button */
     }
 
     .login-card .home-button {
@@ -289,7 +288,6 @@
 
     .login-card h2 {
       font-size: 1.4rem;
-      padding-right: 3.5rem;
     }
 
     .login-card .home-button {

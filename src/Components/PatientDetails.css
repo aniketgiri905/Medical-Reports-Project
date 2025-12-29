@@ -474,3 +474,68 @@
   }
 }
 
+.scroll-to-top-btn {
+  position: fixed;
+  font-size: 24px;
+  bottom: 30px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  background: var(--medical-card-bg);
+  color: var(--medical-primary);
+  border: 2px solid var(--medical-primary-light);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 2px 8px var(--medical-shadow);
+}
+
+.scroll-to-top-btn:hover {
+  background: var(--medical-primary);
+  color: white;
+  border-color: var(--medical-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.25);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    width: 44px;
+    height: 44px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 20px;
+    border-width: 1.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 12px;
+    right: 12px;
+    font-size: 18px;
+  }
+}
+
