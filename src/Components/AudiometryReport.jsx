@@ -385,7 +385,7 @@ function AudiometryReport() {
 
       pdf.setFont(undefined, 'bold')
       pdf.setTextColor(...primaryColor)
-      const labelWidth = Math.max(pdf.getTextWidth(labelText), 30)
+      const labelWidth = Math.max(pdf.getTextWidth(labelText), 25)
       pdf.text(labelText, currentX, currentY)
 
       pdf.setFont(undefined, 'normal')
@@ -397,12 +397,12 @@ function AudiometryReport() {
     }
 
     // Add patient info items in the order shown in image
-    addPatientInfoItem('Medical Test Date', dataToUse.medicalTestDate)
+    addPatientInfoItem('Med. Test Date', dataToUse.medicalTestDate)
     addPatientInfoItem('Name', dataToUse.name)
     addPatientInfoItem('Sex', dataToUse.sex)
     addPatientInfoItem('Age', dataToUse.age, true)
-    addPatientInfoItem('Contractor Name', dataToUse.contractorName)
-    addPatientInfoItem('CERTI NO.', dataToUse.certNo)
+    addPatientInfoItem('Cont. Name', dataToUse.contractorName)
+    addPatientInfoItem('Certi. NO.', dataToUse.certNo)
     addPatientInfoItem('Designation', dataToUse.designation)
     addPatientInfoItem('Emp Code', dataToUse.empCode)
     addPatientInfoItem('Dep. Name', dataToUse.departmentName)
