@@ -6,6 +6,7 @@ import PatientForm from './Components/PatientForm'
 import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
 import AudiometryReport from './Components/AudiometryReport'
+import AboutUs from './Components/AboutUs'
 import Header from './Components/Header'
 import Login from './Components/Auth/Login'
 import './App.css'
@@ -163,6 +164,10 @@ function App() {
               element={
                 <AudiometryReport />
               } 
+            />
+            <Route 
+              path="/about" 
+              element={<AboutUs />} 
             />
             <Route 
               path="/login" 
