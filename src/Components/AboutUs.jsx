@@ -74,6 +74,11 @@ function AboutUs() {
                 <p>Specialized audiometry report generation with interactive charts and graphical representations</p>
               </div>
               <div className="feature-card">
+                <div className="feature-icon">💊</div>
+                <h3>Prescription Pad</h3>
+                <p>Professional prescription pad generator with A4 layout, customizable hospital/doctor details, and PDF export</p>
+              </div>
+              <div className="feature-card">
                 <div className="feature-icon">📥</div>
                 <h3>Excel Integration</h3>
                 <p>Bulk data import and export capabilities with Excel file support for efficient data handling</p>

@@ -40,8 +40,8 @@ function Help() {
             <p>
               Welcome to the Medical Reports Management System! This comprehensive platform is designed
               to streamline healthcare documentation and patient record management. Whether you're creating
-              new reports, viewing patient details, or generating audiometry reports, this guide will help
-              you navigate and utilize all features effectively.
+              new reports, viewing patient details, generating audiometry reports, or creating prescription pads,
+              this guide will help you navigate and utilize all features effectively.
             </p>
             <div className="info-box">
               <strong>Quick Tip:</strong> Make sure you're signed in to access all features including
@@ -161,6 +161,68 @@ function Help() {
             <div className="info-box">
               <strong>Excel Upload:</strong> You can also upload Excel files to automatically populate
               audiometry data for multiple patients at once.
+            </div>
+          </div>
+        </section>
+
+        <section className="help-section">
+          <div className="section-icon">💊</div>
+          <div className="section-content">
+            <h2>Prescription Pad Generator</h2>
+            <p>
+              The Prescription Pad feature allows you to create professional prescription pads with customizable
+              hospital and doctor information. Perfect for generating prescription documents with a clean,
+              professional layout suitable for medical documentation.
+            </p>
+            <h3>Creating a Prescription Pad:</h3>
+            <ol className="help-list">
+              <li>
+                <strong>Navigate to Prescription Pad:</strong> Click on "Letter Pad" from the footer or navigate
+                to the Prescription Pad section.
+              </li>
+              <li>
+                <strong>Fill in Letter Pad Information (Mandatory Fields):</strong>
+                <ul>
+                  <li><strong>Hospital Name:</strong> Enter the name of your hospital or clinic (required)</li>
+                  <li><strong>Doctor Name:</strong> Enter the doctor's name (required)</li>
+                  <li><strong>Address:</strong> Enter the hospital/clinic address (required)</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Fill in Optional Information:</strong>
+                <ul>
+                  <li><strong>Doctor Degree:</strong> Enter doctor's qualifications (e.g., MBBS, MD, MS)</li>
+                  <li><strong>Doctor Specialist:</strong> Enter specialization (e.g., Cardiologist, Neurologist)</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Fill in Patient Information (Optional):</strong>
+                <ul>
+                  <li><strong>Patient Name:</strong> Enter the patient's name</li>
+                  <li><strong>Date:</strong> Select or enter the prescription date</li>
+                  <li><strong>Age:</strong> Enter patient's age</li>
+                  <li><strong>Gender:</strong> Enter patient's gender</li>
+                  <li><strong>Height:</strong> Enter patient's height in cm</li>
+                  <li><strong>Weight:</strong> Enter patient's weight in kg</li>
+                </ul>
+              </li>
+              <li>
+                <strong>Export to PDF:</strong> Click "Export PDF" button to generate a professional PDF document
+                in A4 format with your prescription pad.
+              </li>
+              <li>
+                <strong>Reset Form:</strong> Click "Reset" button to clear all fields and start fresh.
+              </li>
+            </ol>
+            <div className="info-box">
+              <strong>Note:</strong> The prescription pad generates a professional A4-sized PDF with a teal gradient
+              header containing hospital and doctor information, patient details section, blank prescription area,
+              and signature section on the right side.
+            </div>
+            <div className="warning-box">
+              <strong>Mandatory Fields:</strong> Hospital Name, Doctor Name, and Address are required fields.
+              You must fill these fields before exporting to PDF. The system will display an error message
+              if any mandatory fields are missing.
             </div>
           </div>
         </section>
