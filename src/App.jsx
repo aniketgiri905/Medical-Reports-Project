@@ -7,6 +7,7 @@ import PatientForm from './Components/PatientForm'
 import PatientList from './Components/PatientList'
 import PatientDetails from './Components/PatientDetails'
 import AudiometryReport from './Components/AudiometryReport'
+import LetterPad from './Components/LetterPad'
 import AboutUs from './Components/AboutUs'
 import Help from './Components/Help'
 import SystemInfo from './Components/SystemInfo'
@@ -172,6 +173,12 @@ function App() {
               path="/audiometry" 
               element={
                 <AudiometryReport />
+              } 
+            />
+            <Route 
+              path="/letterpad" 
+              element={
+                <LetterPad />
               } 
             />
             <Route 

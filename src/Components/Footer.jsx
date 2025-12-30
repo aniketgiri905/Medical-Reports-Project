@@ -12,15 +12,16 @@ function Footer() {
           <p>Streamlining healthcare documentation with advanced technology</p>
         </div>
 
-        <div className="footer-section footer-links-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/new">Create Report</Link></li>
-            <li><Link to="/audiometry">Audiometry Report</Link></li>
-            <li><Link to="/about">About Us</Link></li>
-          </ul>
-        </div>
+            <div className="footer-section footer-links-section">
+              <h4>Quick Links</h4>
+              <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/new">Create Report</Link></li>
+                <li><Link to="/audiometry">Audiometry Report</Link></li>
+                <li><Link to="/letterpad">Prescription Pad</Link></li>
+                <li><Link to="/about">About Us</Link></li>
+              </ul>
+            </div>
 
         <div className="footer-section footer-support-section">
           <h4>Support</h4>

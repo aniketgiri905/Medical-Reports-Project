@@ -211,6 +211,9 @@ function PatientList({ patients, onDelete }) {
           <Link to="/audiometry" className="audiometry-btn">
             Audiometry Report
           </Link>
+          <Link to="/letterpad" className="audiometry-btn">
+            Prescription Pad
+          </Link>
           {patients.length > 0 && (
             <>
               <button onClick={handleExportAllPDF} className="export-btn pdf-export-btn">

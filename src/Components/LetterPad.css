@@ -1,0 +1,758 @@
+.letterpad-container {
+  min-height: calc(100vh - 140px);
+  background: var(--medical-bg-gradient);
+  transition: background 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.letterpad-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.letterpad-header-actions h1 {
+  color: var(--medical-text);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-buttons button {
+  padding: 0.75em 1.5em;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--medical-primary) 0%, var(--medical-primary-dark) 100%);
+  color: white;
+  box-shadow: 0 3px 8px var(--medical-shadow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px var(--medical-shadow-hover);
+  background: linear-gradient(135deg, var(--medical-primary-dark) 0%, var(--medical-primary) 100%);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--medical-card-bg);
+  color: var(--medical-text);
+  border: 2px solid var(--medical-border);
+}
+
+.btn-secondary:hover {
+  background: var(--medical-hover-bg);
+  border-color: var(--medical-primary);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+/* Main Content Layout */
+.letterpad-main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Hide preview section by default - it's now in modal */
+.letterpad-preview-section {
+  display: none !important;
+}
+
+/* Form Section */
+.letterpad-form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.letterpad-form-section {
+  background: var(--medical-card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--medical-shadow);
+  border: 1px solid var(--medical-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.letterpad-form-section h2 {
+  color: var(--medical-primary-dark);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  border-left: 4px solid var(--medical-primary);
+  padding-left: 0.75rem;
+}
+
+.letterpad-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.letterpad-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.letterpad-form-group-full {
+  grid-column: 1 / -1;
+}
+
+.letterpad-form-group label {
+  color: var(--medical-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.letterpad-form-group input,
+.letterpad-form-group textarea {
+  padding: 0.75em;
+  border: 2px solid var(--medical-input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--medical-input-bg);
+  color: var(--medical-text);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  font-family: inherit;
+}
+
+.letterpad-form-group input:focus,
+.letterpad-form-group textarea:focus {
+  outline: none;
+  border-color: var(--medical-primary);
+  background: var(--medical-card-bg);
+  box-shadow: 0 0 0 3px rgba(0, 131, 143, 0.1);
+}
+
+.letterpad-form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.letterpad-form-group input::placeholder,
+.letterpad-form-group textarea::placeholder {
+  color: var(--medical-text-light);
+  font-size: 0.9rem;
+}
+
+.required-asterisk {
+  color: #ef5350;
+  font-weight: bold;
+  margin-left: 2px;
+}
+
+/* Hidden preview section for PDF generation - Always A4 size, no responsive changes */
+.letterpad-data-section {
+  background: white;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  height: 1123px !important; /* A4 height at 96 DPI (297mm) */
+  width: 794px !important; /* A4 width at 96 DPI (210mm) */
+  max-width: 794px !important;
+  min-width: 794px !important;
+  min-height: 1123px !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  box-sizing: border-box;
+}
+
+/* Force all PDF section children to use base styles - no responsive changes */
+.letterpad-data-section .letterpad-header-section {
+  padding: 2rem 2.5rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.letterpad-data-section .letterpad-header-content {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: 2rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.letterpad-data-section .letterpad-header-left {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+.letterpad-data-section .letterpad-header-right {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  align-items: flex-end !important;
+  text-align: right !important;
+  min-width: 0 !important;
+  width: auto !important;
+}
+
+.letterpad-data-section .letterpad-hospital-name {
+  font-size: 1.9rem !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  letter-spacing: 0.5px !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.letterpad-data-section .letterpad-hospital-address {
+  font-size: 1rem !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  margin: 0 !important;
+  line-height: 1.5 !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.letterpad-data-section .letterpad-doctor-name {
+  font-size: 1.3rem !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  letter-spacing: 0.3px !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.letterpad-data-section .letterpad-doctor-degree {
+  font-size: 0.9rem !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+.letterpad-data-section .letterpad-patient-fields {
+  padding: 1.5rem 2.5rem !important;
+  background: white !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.letterpad-data-section .letterpad-field-row {
+  display: grid !important;
+  grid-template-columns: 2fr 1fr 1fr 1fr !important;
+  gap: 1rem !important;
+  margin-bottom: 1rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  align-items: baseline !important;
+}
+
+.letterpad-data-section .letterpad-field-row:first-child {
+  grid-template-columns: 2fr 1fr !important;
+}
+
+.letterpad-data-section .letterpad-field-row:first-child .letterpad-field-item:first-child {
+  grid-column: 1 !important;
+}
+
+.letterpad-data-section .letterpad-field-row:first-child .letterpad-field-item:last-child {
+  grid-column: 2 !important;
+}
+
+.letterpad-data-section .letterpad-field-item {
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 0.75rem !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  width: auto !important;
+}
+
+.letterpad-data-section .letterpad-field-label {
+  min-width: auto !important;
+  font-size: 0.95rem !important;
+}
+
+.letterpad-data-section .letterpad-field-line {
+  width: 100% !important;
+  min-width: 0 !important;
+  font-size: 1rem !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  box-sizing: border-box !important;
+}
+
+.letterpad-data-section .letterpad-prescription-wrapper {
+  padding: 2rem 2.5rem !important;
+  background: white !important;
+  flex: 1 !important;
+  padding-bottom: 120px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: auto !important;
+}
+
+.letterpad-data-section .letterpad-prescription-lines {
+  min-height: 450px !important;
+  background: white !important;
+}
+
+.letterpad-data-section .letterpad-signature-section {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  padding: 2rem 2.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: right !important;
+}
+
+.letterpad-data-section .letterpad-signature-line {
+  width: 250px !important;
+  height: 1px !important;
+  background: #333 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Header Section with Hospital and Doctor Info */
+.letterpad-header-section {
+  background: linear-gradient(135deg, #00838f 0%, #4db6ac 50%, #80cbc4 100%);
+  padding: 2rem 2.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.letterpad-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.letterpad-header-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.letterpad-hospital-name {
+  color: #ffffff;
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.letterpad-hospital-address {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.letterpad-header-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+  text-align: right;
+  min-width: 0;
+}
+
+.letterpad-doctor-name {
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.3px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.letterpad-doctor-degree {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Patient Fields */
+.letterpad-patient-fields {
+  padding: 1.5rem 2.5rem;
+  background: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.letterpad-field-row {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  align-items: baseline;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.letterpad-field-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.letterpad-field-label {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  min-width: fit-content;
+  flex-shrink: 0;
+}
+
+.letterpad-field-line {
+  color: #666;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #d0d0d0;
+  flex: 1;
+  min-width: 0;
+  padding-bottom: 3px;
+  display: inline-block;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Prescription Area */
+.letterpad-prescription-wrapper {
+  padding: 2rem 2.5rem;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: 120px; /* Space for signature section */
+}
+
+.letterpad-prescription-area {
+  position: relative;
+  background: white;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.letterpad-prescription-lines {
+  min-height: 450px;
+  background: white;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 39px,
+    #e0e0e0 39px,
+    #e0e0e0 40px
+  );
+  background-position: 0 0;
+  width: 100%;
+}
+
+/* Signature Section */
+.letterpad-signature-section {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  border-top: 1px solid #e0e0e0;
+  background: #fafafa;
+  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: right;
+}
+
+.letterpad-signature-line {
+  width: 250px;
+  height: 2px;
+  background: #333;
+  margin-bottom: 0.5rem;
+}
+
+.letterpad-signature-label {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* Scroll to Top Button */
+.scroll-to-top-btn {
+  position: fixed;
+  font-size: 24px;
+  bottom: 30px;
+  right: 30px;
+  width: 48px;
+  height: 48px;
+  background: var(--medical-card-bg);
+  color: var(--medical-primary);
+  border: 2px solid var(--medical-primary-light);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+  box-shadow: 0 2px 8px var(--medical-shadow);
+}
+
+.scroll-to-top-btn:hover {
+  background: var(--medical-primary);
+  color: white;
+  border-color: var(--medical-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 131, 143, 0.25);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .letterpad-header-actions,
+  .letterpad-main-content,
+  .letterpad-form-section,
+  .letterpad-form-sections,
+  .scroll-to-top-btn {
+    display: none !important;
+  }
+
+  .letterpad-preview-section {
+    position: static;
+    width: 100%;
+  }
+
+  .letterpad-data-section {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    page-break-after: auto;
+    height: 1123px !important; /* A4 height at 96 DPI */
+    width: 794px !important; /* A4 width at 96 DPI */
+    max-width: 794px !important;
+    min-width: 794px !important;
+    min-height: 1123px !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+  }
+
+
+
+  body {
+    background: white;
+    margin: 0;
+    padding: 0;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 1200px) {
+  .letterpad-main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .letterpad-preview-section {
+    position: static;
+  }
+
+
+  .letterpad-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .letterpad-main-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .letterpad-container {
+    padding: 1rem;
+  }
+
+  .letterpad-header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .letterpad-header-actions h1 {
+    font-size: 1.4rem;
+  }
+
+  .header-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .header-buttons button {
+    width: 100%;
+    text-align: center;
+    padding: 0.75em 1em;
+  }
+
+  .letterpad-form-section {
+    padding: 1.5rem;
+  }
+
+  .letterpad-form-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .letterpad-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .letterpad-doctor-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .letterpad-doctor-label {
+    min-width: auto;
+  }
+
+  .letterpad-patient-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .letterpad-patient-label {
+    min-width: auto;
+  }
+
+  .letterpad-patient-value {
+    min-width: auto;
+  }
+
+  .letterpad-signature-line {
+    width: 200px;
+  }
+
+  .scroll-to-top-btn {
+    width: 44px;
+    height: 44px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 20px;
+    border-width: 1.5px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .letterpad-container {
+    padding: 0.75rem;
+  }
+
+  .letterpad-form-section {
+    padding: 1rem;
+  }
+
+  .scroll-to-top-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 12px;
+    right: 12px;
+    font-size: 18px;
+  }
+
+}
+
